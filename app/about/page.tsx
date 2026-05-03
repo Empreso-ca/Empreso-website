@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/Card";
+import { CustomGrid } from "@/components/ui/CustomGrid";
 
 export const metadata = { title: "About — Empreso" };
 
@@ -29,16 +30,9 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section className="relative mx-auto max-w-7xl border-y border-border/60">
-        <div className="grid grid-cols-2 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.l} className="border-r border-border/60 p-8 text-center last:border-r-0">
-              <p className="font-mono-display text-3xl font-bold sm:text-4xl">{s.v}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{s.l}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <CustomGrid stats={stats} cols={4}/>
+      <div className="absolute left-1/2 -translate-x-1/2 w-screen border-t border-white/[0.1]" /> 
+
 
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Our values</h2>

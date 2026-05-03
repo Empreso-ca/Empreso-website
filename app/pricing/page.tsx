@@ -1,5 +1,6 @@
-import { Check } from "lucide-react";
+import { Check, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 
 export const metadata = { title: "Pricing — empreso" };
 
@@ -8,38 +9,49 @@ const plans = [
     name: "Free",
     price: "$0",
     cta: "Get Started",
-    features: ["500 Empreso Credits", "5 Public Pipes", "0 Private Pipes", "500 Agent Runs", "5 MB Memory", "2 Memory Files", "Community support", "Threads, Parser, and tools"],
+    disabled: false,
+    url: "/sign-up",
+    features: ["ATS Optimization (Basic)", "3 Trials for AI CV generator Agent", "Job Recommendations", "Manual Job Applications", "Mock Practice", "Empreso Coding Platform", "Background Verification", "Community support"],
   },
+  // {
+  //   name: "Individual",
+  //   price: "$100",
+  //   cta: "Get Started",
+  //   disabled: true,
+  //   features: ["20K Empreso Credits", "Unlimited Public Pipes", "10 Private Pipes", "Unlimited Runs", "20 MB Memory", "20 Memory Files", "Community support", "1 Week Logs Retention", "Threads, Parser, and tools", "Unlimited Memory Retrieval"],
+  // },
   {
-    name: "Individual",
-    price: "$100",
-    cta: "Get Started",
-    features: ["20K Empreso Credits", "Unlimited Public Pipes", "10 Private Pipes", "Unlimited Runs", "20 MB Memory", "20 Memory Files", "Community support", "1 Week Logs Retention", "Threads, Parser, and tools", "Unlimited Memory Retrieval"],
-  },
-  {
-    name: "Growth",
+    name: "Pro",
     price: "$250",
     cta: "Get Started",
     highlighted: true,
-    features: ["75K Empreso Credits", "Unlimited Public Pipes", "30 Private Pipes", "Unlimited Runs", "50 MB Memory", "50 Memory Files", "Community support", "1 Week Logs Retention", "5 Org Seats ($30/seat)", "Threads, Parser, and tools", "Unlimited Memory Retrieval"],
+    disabled: true,
+    features: ["ATS Optimization (Advanced)", "Unlimited access for AI CV generator Agent", "Job Recommendations", "Automated Job Applications through AI agents", "Connecting Recruiters", "Full Empreso Services", "Empreso Coding Platform", "Mock Interview Practice", "Background Verification", "Community support"],
   },
   {
-    name: "Custom",
+    name: "Training",
     price: "Talk to us",
     cta: "Contact us",
-    features: ["Unlimited Pipes", "Unlimited Runs", "Unlimited RAG Memory", "High-Performance RAG", "Discount on usage runs", "Unlimited vector storage", "Unlimited logs retention", "Dedicated FDE Engineers", "Account Analytics, Fwds", "SAML / Single Sign-On", "Enterprise Context Engine", "RBAC & Access Controls", "Advanced rate limiting", "SOC 2, HIPAA & GDPR"],
+    disabled: false,
+    url: "/contact",
+    features: ["ATS Optimization (Advanced)", "Unlimited access for AI CV generator Agent", "Technical Training", "Job Recommendations", "Automated Job Applications through AI agents", "Connecting Recruiters", "Full Empreso Services", "Empreso Coding Platform", "Mock Interview Practice", "Background Verification", "Community support"],
   },
 ];
 
 export default function PricingPage() {
+
   return (
     <main className="relative">
       <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="max-w-3xl">
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Pricing Plans</h1>
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-            From indie developers, early-stage startups to growing enterprises, ⌘ empreso offers most competitive pricing to make AI accessible to everyone.
+          <p className="mt-5 text-base text-muted-foreground flex items-center whitespace-nowrap">
+            From students, early-stage freshers to senior developers to grow in their career paths,
+            <span className="inline-flex items-center mx-1">
+              <Terminal />
+            </span>
+            Empreso offers most competitive pricing to make AI help in Job hunt.
           </p>
         </div>
 
@@ -56,9 +68,13 @@ export default function PricingPage() {
                 <span className="font-mono-display text-3xl font-bold">{p.price}</span>
                 {p.price.startsWith("$") && <span className="text-xs text-muted-foreground">/ month</span>}
               </div>
-              <Button className="mt-5 w-full" variant={p.highlighted ? "default" : "outline"}>
-                {p.cta}
-              </Button>
+              <Link href={p.url? p.url : "/#"} aria-disabled={p.disabled}>
+                <Button className="mt-5 w-full"
+                  disabled={p.disabled}
+                  variant={p.highlighted ? "default" : "outline"}>
+                  {p.cta}
+                </Button>
+              </Link>
               <ul className="mt-8 space-y-3">
                 {p.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">

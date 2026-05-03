@@ -8,7 +8,7 @@ const cols = [
 ];
 
 export const Footer = () => (
-  <footer className="relative border-t border-border/60">
+  <footer className="relative border-t border-white/[0.1]">
     <div className="mx-auto max-w-7xl px-6 py-16">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-5">
         {cols.map((col, i) => (

@@ -26,7 +26,7 @@ export default function SolutionsPage() {
 
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Solutions</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Services</p>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
             One platform. Every AI agent use case.
           </h1>
@@ -51,7 +51,7 @@ export default function SolutionsPage() {
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-7xl border-t border-border/60 px-6 py-24">
+      <section className="relative mx-auto max-w-7xl border-t border-white/[0.1] px-6 py-24">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">By use case</h2>
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {useCases.map((u) => (

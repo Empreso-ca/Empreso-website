@@ -1,5 +1,5 @@
 export const Community = () => (
-  <section className="relative border-t border-border/60">
+  <section className="relative border-t border-white/[0.1]">
     <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-24 lg:grid-cols-2">
       <div className="max-w-md">
         <p className="text-base leading-relaxed text-muted-foreground">

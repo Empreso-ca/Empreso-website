@@ -10,7 +10,7 @@ const jobs = [
 ];
 
 export const Careers = () => (
-  <section className="relative border-t border-border/60">
+  <section className="relative border-t border-white/[0.1]">
     <div className="mx-auto max-w-7xl px-6 py-24">
       <div className="max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">We're hiring!</h2>
