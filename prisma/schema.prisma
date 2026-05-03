@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+// Main User model
+model User {
+  id                     Int             @id @default(autoincrement())
+  // additional unique user ID
+  userId                 String          @unique
+
+  // Basic Information
+  firstName              String
+  lastName               String
+
+  // Contact Information
+  email                  String          
+  phone                  String
+
+  // Professional Links
+  linkedin               String?         // optional field
+  city                   String
+  country                String
+
+  // Education
+  qualification          String
+  graduationYear         Int
+  fieldOfStudy           String
+
+  // Work Experience
+  experience             String
+  currentJobRole         String?         // optional field
+  currentEmployer        String?         // optional field
+
+  // Career Preferences
+  preferredDeveloperRole String?
+  course                 String?
+
+  // Resume Upload
+  resume                 String          // store file path or URL
+
+  // Job Preferences
+  preferredJobLocation   String
+  visaStatus             String
+
+  // Additional Details
+  source                 String
+  comments               String?         // optional
+
+  // Agreements
+  agreeTerms             Boolean
+  subscribeUpdates       Boolean         @default(false)
+
+  applications Application[] // Back-reference to applications
+
+  subscription           Subscription?
+}
+
+
+
+
+// jobs
+
+
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  location    String?
+  jobType     JobType
+  salaryRange String?
+  postedAt    DateTime @default(now())
+  expiryDate  DateTime?
+  status      JobStatus @default(ACTIVE)
+  companyLogo String
+  companyName String
+  applications Application[]
+}
+
+model Application {
+  id         Int      @id @default(autoincrement())
+  job        Job      @relation(fields: [jobId], references: [id])
+  jobId      Int
+  applicant  User     @relation(fields: [userId], references: [userId])
+  userId     String
+  resume     String?
+  status     ApplicationStatus @default(PENDING)
+  appliedAt  DateTime @default(now())
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+}
+
+enum JobStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+
+
+// PRO Subscriptions
+
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+
+  user      User     @relation(fields: [userId], references: [userId])
+  userId    String   @unique
+
+  plan      PlanType @default(FREE)
+
+  trialsLeft Int     @default(3)
+
+  isActive  Boolean  @default(false)
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum PlanType {
+  FREE
+  PRO
+}
