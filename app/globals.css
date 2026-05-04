@@ -56,6 +56,42 @@
     mix-blend-mode: overlay;
     pointer-events: none;
   }
+  .dot-bg {
+    background-image: radial-gradient(
+      circle,
+      hsl(var(--grid-line)) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
+  .cross-bg {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        hsl(var(--grid-line)) 0px,
+        hsl(var(--grid-line)) 1px,
+        transparent 1px,
+        transparent 12px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        hsl(var(--grid-line)) 0px,
+        hsl(var(--grid-line)) 1px,
+        transparent 1px,
+        transparent 12px
+      );
+  }
+
+  .diagonal-bg {
+    background-image: repeating-linear-gradient(
+      135deg,
+      hsl(var(--grid-line)) 0px,
+      hsl(var(--grid-line)) 2px,
+      transparent 0px,
+      transparent 8px
+    );
+  }
 }
 
 /* OPTIMIZATIONS: Smooth animations for better UX without jank */
@@ -105,3 +141,58 @@
 /* Optimize font loading to prevent layout shift */
 @font-feature-settings: "kern" 1;
 @font-display: swap;
+
+
+
+.bento-hatch {
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 2px,
+      transparent 2px,
+      transparent 12px
+    );
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 25s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 25s linear infinite;
+}
+
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: fade 0.7s ease;
+}

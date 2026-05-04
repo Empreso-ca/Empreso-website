@@ -1,11 +1,12 @@
 import { EMPRESOBentoGrid } from '@/components/WhatWeDo'
-import React from 'react'
+import { ServiceHead } from '@/components/WhatWeDo'
 
 const page = () => {
   return (
-    <div className='grid-bg'>
+    <main>
+      <ServiceHead />
       <EMPRESOBentoGrid/>
-    </div>
+    </main>
   )
 }
 

@@ -11,6 +11,8 @@ import {
   Brain, 
   Network 
 } from 'lucide-react'
+import { useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 const categories = [
     {
@@ -254,6 +256,7 @@ const categories = [
   ];
 
 export default function TrainingPage() {
+  const containerRef = useRef<HTMLDivElement>(null)
   return (
     <main className="relative min-h-screen bg-background text-foreground">
       {/* GRID BACKGROUND */}
@@ -276,97 +279,130 @@ export default function TrainingPage() {
       </section>
 
       {/* SECTIONS */}
-      <section className="relative mx-auto max-w-7xl px-6 pb-32 space-y-28">
-        {categories.map((cat) => (
-          <div key={cat.id} className="scroll-mt-24">
+      <section className="relative pb-32 space-y-28" ref={containerRef}>
+        {categories.map((cat) => {
+          const { ref, inView } = useInView({
+              threshold: 0.2,
+              triggerOnce: true,
+            });
+          
+          return (
+          <div key={cat.id} id={cat.id} className="scroll-mt-24" ref={ref}>
 
-            {/* TITLE */}
-            <div className="mb-10">
+            <div className="mx-auto max-w-7xl px-6 mb-10">
               <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 {cat.title}
               </h2>
             </div>
 
-            {/* HORIZONTAL FULL WIDTH SEPERATOR */}
-            <div className="absolute left-1/2 -translate-x-1/2 w-screen border-t border-white/[0.1]" />
-
-            {/* GRID WRAPPER */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 border border-white/[0.1] divide-y lg:divide-y-0 lg:divide-x divide-border/60 bg-opacity-25">
-
-              {/* TOPICS */}
-              <div className="p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  Topics Covered
-                </h3>
-
-                <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                  {cat.topics.map((t) => (
-                    <li key={t} className="flex gap-2">
-                      <span className="text-primary">•</span> {t}
-                    </li>
-                  ))}
-                </ul>
+            <div className="border-y bg-neutral-950 border-white/[0.1]">
+              <div className="mx-auto max-w-7xl px-6">
+                <CategoryCard cat={cat} />
               </div>
-
-              {/* CAREER READINESS */}
-              <div className="p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  Career Readiness
-                </h3>
-
-                <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                  {cat.careerReadiness.points.map((p) => (
-                    <li key={p} className="flex gap-2">
-                      <span className="text-green-500">✓</span> {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* JOB MARKET */}
-              <div className="p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  Job Market Outlook
-                </h3>
-
-                <div className="mt-4 space-y-4 text-sm">
-
-                  <p className="text-muted-foreground">
-                    <span className="font-medium text-foreground">Project Growth:</span>{" "}
-                    {cat.jobMarket.growth}
-                  </p>
-
-                  <div>
-                    <p className="font-medium text-foreground">High-Demand Cities</p>
-                    <p className="text-muted-foreground">
-                      {cat.jobMarket.cities.join(", ")}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-foreground">Jobs Types</p>
-                    <p className="text-muted-foreground">
-                      {cat.jobMarket.jobTypes.join(", ")}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="font-medium text-foreground">Salary Ranges</p>
-                    <p className="text-muted-foreground">
-                      Entry: {cat.jobMarket.salaries.entry}
-                      <br />
-                      Senior: {cat.jobMarket.salaries.experienced}
-                    </p>
-                  </div>
-
-                </div>
-              </div>
-
             </div>
-            <div className="absolute left-1/2 -translate-x-1/2 w-screen border-t border-white/[0.1]" /> 
+
           </div>
-        ))}
+        )})}
       </section>
     </main>
+  );
+}
+
+type Category = {
+  id: string;
+  icon: any;
+  title: string;
+  topics: string[];
+  careerReadiness: {
+    points: string[];
+  };
+  jobMarket: {
+    growth: string;
+    cities: string[];
+    jobTypes: string[];
+    salaries: {
+      entry: string;
+      experienced: string;
+    };
+  };
+};
+
+type Props = {
+  cat: Category;
+};
+
+function CategoryCard({ cat }: Props) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 border border-white/[0.1] divide-y lg:divide-y-0 lg:divide-x divide-border/60 bg-opacity-25">
+      {/* TOPICS */}
+      <div className="p-6">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Topics Covered
+        </h3>
+
+        <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+          {cat.topics.map((t) => (
+            <li key={t} className="flex gap-2">
+              <span className="text-primary">•</span> {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* CAREER READINESS */}
+      <div className="p-6">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Career Readiness
+        </h3>
+
+        <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+          {cat.careerReadiness.points.map((p) => (
+            <li key={p} className="flex gap-2">
+              <span className="text-green-500">✓</span> {p}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* JOB MARKET */}
+      <div className="p-6">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Job Market Outlook
+        </h3>
+
+        <div className="mt-4 space-y-4 text-sm">
+
+          <p className="text-muted-foreground">
+            <span className="font-medium text-foreground">Project Growth:</span>{" "}
+            {cat.jobMarket.growth}
+          </p>
+
+          <div>
+            <p className="font-medium text-foreground">High-Demand Cities</p>
+            <p className="text-muted-foreground">
+              {cat.jobMarket.cities.join(", ")}
+            </p>
+          </div>
+
+          <div>
+            <p className="font-medium text-foreground">Jobs Types</p>
+            <p className="text-muted-foreground">
+              {cat.jobMarket.jobTypes.join(", ")}
+            </p>
+          </div>
+
+          <div>
+            <p className="font-medium text-foreground">Salary Ranges</p>
+            <p className="text-muted-foreground">
+              Entry: {cat.jobMarket.salaries.entry}
+              <br />
+              Senior: {cat.jobMarket.salaries.experienced}
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
   );
 }

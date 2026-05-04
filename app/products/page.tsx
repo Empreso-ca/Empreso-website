@@ -1,16 +1,15 @@
-import { ArrowUpRight, Bot, Brain, Cloud, Code2, Database, Workflow } from "lucide-react";
+import { ArrowUpRight, Bot, Brain, Cloud, Code2, Database, Workflow, FileText } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-
-export const metadata = { title: "Solutions — Empreso" };
+import { LogoProds } from "@/components/landing/LogoProducts";
 
 const solutions = [
-  { icon: Bot, t: "AI Agents", d: "Compose autonomous agents with memory, tools, and multi-step reasoning." },
-  { icon: Brain, t: "RAG & Memory", d: "Production-grade vector memory with semantic search at any scale." },
-  { icon: Workflow, t: "Workflows", d: "Orchestrate multi-step pipelines across LLMs, tools, and APIs." },
-  { icon: Code2, t: "Coding Agents", d: "Ship coding agents with taste — Command Code, Pipes, and Tools." },
-  { icon: Database, t: "Enterprise Context", d: "Connect company data securely with RBAC and audit trails." },
-  { icon: Cloud, t: "BYOC", d: "Bring your own cloud. Deploy on AWS, GCP, Azure, or Cloudflare." },
+  { icon: Bot, t: "Empreso AI", d: "AI Chat assistant with memory, optimized responses, and real-time interaction handling." },
+  { icon: Brain, t: "ATS Optimization", d: "AI-powered resume tailoring that optimizes content to match job requirements and improve compatibility with applicant tracking systems (ATS)." },
+  { icon: FileText, t: "AI Resume Generator", d: "An AI agent that creates ATS-friendly resumes from job descriptions and exports them as downloadable LaTeX-based PDFs using reusable templates." },
+  { icon: Workflow, t: "Agentic Workflows", d: "Orchestrates multi-step AI pipelines across LLMs and tools to automate personalized job recommendations and end-to-end application workflows." },
+  { icon: Code2, t: "Coding Platform", d: "A premium platform offering curated coding questions to help you crack online assessments, with detailed progress tracking and performance monitoring." },
+  // { icon: Database, t: "Enterprise Context", d: "Connect company data securely with RBAC and audit trails." },
 ];
 
 const useCases = [
@@ -26,12 +25,12 @@ export default function SolutionsPage() {
 
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Services</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Products</p>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
-            One platform. Every AI agent use case.
+            One platform. Every Solution with AI use case.
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-            From hobby projects to mission-critical enterprise systems — Empreso scales with you.
+            From applications to offers - AI-driven Empreso accelerates your career growth.
           </p>
         </div>
 
@@ -51,24 +50,18 @@ export default function SolutionsPage() {
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-7xl border-t border-white/[0.1] px-6 py-24">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">By use case</h2>
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {useCases.map((u) => (
-            <Card key={u.t} className="p-6">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">{u.tag}</p>
-              <h3 className="mt-3 text-lg font-semibold">{u.t}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{u.d}</p>
-            </Card>
-          ))}
-        </div>
+      <section className="relative mx-auto max-w-7xl border-white/[0.1] px-6 py-24">
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">We Work with Tools.</h2>
+        <br />
+        <LogoProds logos={["zapier","GitHub","n8n","Vercel","OpenAI","Gemini","supabase","FORRESTER","Google","databricks", "Clerk", "NEON"]}/>
+
 
         <div className="mt-16 flex flex-col items-center gap-4 rounded-2xl border border-border/70 bg-card/40 p-12 text-center">
-          <h3 className="font-mono-display text-3xl font-bold sm:text-4xl">Ready to ship AI Agents?</h3>
+          <h3 className="font-mono-display text-3xl font-bold sm:text-4xl">Ready to try Empreso Products</h3>
           <p className="max-w-xl text-sm text-muted-foreground">
-            Build, test, and deploy in minutes. Scale your agents instantly with built-in memory and tooling.
+            Build your profile, improve your skills, and land better opportunities faster.
           </p>
-          <Button size="lg" className="mt-2">Start deploying</Button>
+          <Button size="lg" className="mt-2">Get Started</Button>
         </div>
       </section>
     </main>

@@ -1,8 +1,6 @@
 import { Card } from "@/components/ui/Card";
 import { CustomGrid } from "@/components/ui/CustomGrid";
 
-export const metadata = { title: "About — Empreso" };
-
 const stats = [
   { v: "5,000+", l: "Companies" },
   { v: "30+", l: "AI models" },
@@ -29,10 +27,8 @@ export default function AboutPage() {
           Empreso is a fully remote team of engineers and researchers building the most powerful serverless platform for composable AI agents.
         </p>
       </section>
-
-      <CustomGrid stats={stats} cols={4}/>
-      <div className="absolute left-1/2 -translate-x-1/2 w-screen border-t border-white/[0.1]" /> 
-
+      
+      <CustomGrid stats={stats} cols={4} className="bg-neutral-950" />
 
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Our values</h2>

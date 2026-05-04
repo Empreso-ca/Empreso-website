@@ -1,15 +1,14 @@
-import { Mail, MapPin, MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Card } from "@/components/ui/Card";
 
-export const metadata = { title: "Contact — Empreso" };
-
 const channels = [
-  { icon: Mail, t: "Email", d: "hello@empreso.com" },
+  { icon: Mail, t: "Email", d: "contact@empreso.ca" },
+  { icon: Linkedin, t: "LinkedIn", d: "Join our community" },
   { icon: MessageCircle, t: "Discord", d: "Join 5,000+ developers" },
-  { icon: MapPin, t: "HQ", d: "2261 Market St, San Francisco" },
+  { icon: MapPin, t: "Location", d: "333 King St E, Toronto, ON M5A 3X5, Canada." },
 ];
 
 export default function ContactPage() {
@@ -30,20 +29,20 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">First name</label>
-                  <Input placeholder="Ada" />
+                  <Input placeholder="John" />
                 </div>
                 <div>
                   <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Last name</label>
-                  <Input placeholder="Lovelace" />
+                  <Input placeholder="Doe" />
                 </div>
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Work email</label>
-                <Input type="email" placeholder="ada@company.com" />
+                <Input type="email" placeholder="john@gmail/company.com" />
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Company</label>
-                <Input placeholder="Analytical Engines Inc." />
+                <Input placeholder="Walmart Global Tech Inc." />
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">How can we help?</label>

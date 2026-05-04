@@ -10,14 +10,14 @@ const jobs = [
 ];
 
 export const Careers = () => (
-  <section className="relative border-t border-white/[0.1]">
-    <div className="mx-auto max-w-7xl px-6 py-24">
-      <div className="max-w-3xl">
+  <section className="relative border-t border-white/[0.1] bg-neutral-950">
+    <div className="mx-auto max-w-7xl px-6 py-5">
+      {/* <div className="max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">We're hiring!</h2>
         <p className="mt-5 text-base leading-relaxed text-muted-foreground">
           We're building the most powerful serverless AI platform that puts developers first. We're a fully remote team of engineers who sweat the details.
         </p>
-      </div>
+      </div> */}
       <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {jobs.map((j) => (
           <Card key={j.title} className="flex flex-col p-6">

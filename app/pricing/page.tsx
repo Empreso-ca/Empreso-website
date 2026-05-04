@@ -46,11 +46,9 @@ export default function PricingPage() {
       <section className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="max-w-3xl">
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Pricing Plans</h1>
-          <p className="mt-5 text-base text-muted-foreground flex items-center whitespace-nowrap">
-            From students, early-stage freshers to senior developers to grow in their career paths,
-            <span className="inline-flex items-center mx-1">
-              <Terminal />
-            </span>
+          <p className="mt-5 text-base text-muted-foreground">
+            From students, early-stage freshers to senior developers to grow in their career paths,{" "}
+            <Terminal className="inline h-4 w-4 align-middle mx-1" />
             Empreso offers most competitive pricing to make AI help in Job hunt.
           </p>
         </div>
