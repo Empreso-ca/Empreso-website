@@ -19,7 +19,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ markdown }) => {
   // Strip optional code-fence and render HTML
   const htmlContent = useMemo(() => {
     const content = stripCodeFence(markdown);
-    console.log(content)
+    // console.log(content)
     return md.render(content);
   }, [markdown, md]);
 

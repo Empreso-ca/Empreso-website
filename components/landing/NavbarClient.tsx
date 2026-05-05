@@ -6,10 +6,10 @@ import { Menu, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navItems = [
-  { label: "Products", href: "/products" },
   { label: "Services", href: "/services" },
-  { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
+  { label: "Products", href: "/products" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Training", href: "/training" },
   { label: "Jobs", href: "/jobs" },
   { label: "ATS-Checker", href: "/ats-check"},

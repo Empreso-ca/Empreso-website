@@ -1,6 +1,6 @@
 import { Hero } from "@/components/landing/Hero";
 import { LogoHome } from "@/components/landing/LogoHome";
-import { Careers } from "@/components/landing/Careers";
+import { Careers } from "@/components/Careers";
 import { Community } from "@/components/landing/Community";
 import Body from "@/components/HomeBody";
 

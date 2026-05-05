@@ -20,23 +20,63 @@ const useCases = [
 
 export default function SolutionsPage() {
   return (
-    <main className="relative">
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
+    // <main className="relative">
+    //   <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
 
-      <section className="relative mx-auto max-w-7xl px-6 py-24">
-        <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Products</p>
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
-            One platform. Every Solution with AI use case.
-          </h1>
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-            From applications to offers - AI-driven Empreso accelerates your career growth.
-          </p>
-        </div>
+    //   <section className="relative mx-auto max-w-7xl px-6 py-24">
+    //     <div className="max-w-3xl">
+    //       <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Products</p>
+    //       <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
+    //         One platform. Every Solution with AI use case.
+    //       </h1>
+    //       <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+    //         From applications to offers - AI-driven Empreso accelerates your career growth.
+    //       </p>
+    //     </div>
+        
+    //     <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Tools we work</h2>
+    //     <br />
+    
+    //   </section>
+    
+    //   <section className="relative mx-auto max-w-7xl border-white/[0.1] px-6 py-24">
 
+    //     <div className="mt-16 flex flex-col items-center gap-4 rounded-2xl border border-border/70 bg-card/40 p-12 text-center">
+    //       <h3 className="font-mono-display text-3xl font-bold sm:text-4xl">Ready to try Empreso Products</h3>
+    //       <p className="max-w-xl text-sm text-muted-foreground">
+    //         Build your profile, improve your skills, and land better opportunities faster.
+    //       </p>
+    //       <Button size="lg" className="mt-2">Get Started</Button>
+    //     </div>
+    //   </section>
+    // </main>
+    
+    <>
+      <main className="relative bg-background text-foreground">
+        <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
+          <section className="relative mx-auto max-w-7xl px-6 py-24">
+            <div className="max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Products</p>
+              <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
+                One platform. Every Solution with AI use case.
+              </h1>
+              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+                From applications to offers - AI-driven Empreso accelerates your career growth.
+              </p>
+            </div>
+          </section>
+      </main>
+
+      <main className="relative bg-background text-foreground">
+        <div className="w-full h-5 opacity-90 border-b border-white/[0.2]" />
+          <p className="font-mono text-center py-5 diagonal-bg">TOOLS THAT WE WORK WITH</p>
+          <LogoProds logos={["zapier","GitHub","n8n","Vercel","OpenAI","Gemini","supabase","FORRESTER","Google","databricks", "Clerk", "NEON"]}/>
+      </main>
+
+      <main className="relative mx-auto max-w-7xl px-6 pb-10">
         <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {solutions.map((s) => (
-            <Card key={s.t} className="p-6">
+              <Card key={s.t} className="p-6">
               <div className="inline-flex rounded-lg bg-secondary p-3">
                 <s.icon className="h-5 w-5" />
               </div>
@@ -48,22 +88,8 @@ export default function SolutionsPage() {
             </Card>
           ))}
         </div>
-      </section>
+      </main>
 
-      <section className="relative mx-auto max-w-7xl border-white/[0.1] px-6 py-24">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">We Work with Tools.</h2>
-        <br />
-        <LogoProds logos={["zapier","GitHub","n8n","Vercel","OpenAI","Gemini","supabase","FORRESTER","Google","databricks", "Clerk", "NEON"]}/>
-
-
-        <div className="mt-16 flex flex-col items-center gap-4 rounded-2xl border border-border/70 bg-card/40 p-12 text-center">
-          <h3 className="font-mono-display text-3xl font-bold sm:text-4xl">Ready to try Empreso Products</h3>
-          <p className="max-w-xl text-sm text-muted-foreground">
-            Build your profile, improve your skills, and land better opportunities faster.
-          </p>
-          <Button size="lg" className="mt-2">Get Started</Button>
-        </div>
-      </section>
-    </main>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { currentUser } from "@clerk/nextjs/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 
 const BUCKET = "resumes";
 
@@ -33,12 +33,6 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
   const safeUserId = user.id.replace(/[^a-zA-Z0-9_-]/g, "_");
   const ext = (file.name.split(".").pop() ?? "pdf").toLowerCase();
   const storagePath = `${safeUserId}/resume.${ext}`; // e.g. "user_2abc/resume.pdf"
-
-  // Create supabase client here so env vars are read at runtime (not module init)
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
