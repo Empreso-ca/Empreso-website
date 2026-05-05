@@ -1,5 +1,5 @@
 import { getResumeFromSupabase } from '@/app/api/resumeService';
-import { getUserId } from '../../_actions';
+import { getUserId } from '@/app/api/user';
 import NewResume from '@/components/NewResume';
 import { Card } from '@/components/ui/Card';
 import { getJobById } from '@/app/api/Jobs';

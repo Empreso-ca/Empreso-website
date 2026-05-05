@@ -1,13 +1,4 @@
 'use server';
-import { auth } from "@clerk/nextjs/server";
-
-const getUserId = async () => {
-  const { userId } = await auth();
-  return userId;
-};
-
-
-
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
@@ -41,6 +32,3 @@ export async function applyToJob(formData: FormData) {
 
   revalidatePath(`/jobs/${jobId}`);
 }
-
-
-export { getUserId };

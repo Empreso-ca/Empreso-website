@@ -42,7 +42,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Company</label>
-                <Input placeholder="Walmart Global Tech Inc." />
+                <Input placeholder="Walmart Global Tech" />
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">How can we help?</label>

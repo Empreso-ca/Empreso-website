@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser, SignOutButton } from "@clerk/nextjs";
+import { useUser, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -19,41 +19,67 @@ const navItems = [
 
 function NavbarAuthButtons({mobile = false,onAction,}: {mobile?: boolean;onAction?: () => void;}) {
   const { isSignedIn, isLoaded } = useUser();
+  const [isProUser, setIsProUser] = useState<boolean | null>(null);
 
-    if (!isLoaded) return null;
-
-    if (isSignedIn) {
-        return (
-            <SignOutButton>
-            <button
-                onClick={onAction}
-                className="w-full rounded-full bg-foreground px-5 py-2 text-sm text-background hover:opacity-90"
-            >
-                Sign out
-            </button>
-            </SignOutButton>
-        );
+  useEffect(() => {
+    async function fetchPro() {
+      const res = await fetch("/api/user/is-pro");
+      const data = await res.json();
+      setIsProUser(data.isPro);
     }
 
-    return (
-        <div className={`flex ${mobile ? "flex-col gap-3 mt-4" : "items-center gap-4"}`}>
-            <Link
-                href="/sign-in"
-                onClick={onAction}
-                className="text-sm text-foreground/80 hover:text-foreground"
-                >
-                Sign in
-            </Link>
+    if (isSignedIn) fetchPro();
+  }, [isSignedIn]);
 
-            <Link
-                href="/sign-up"
-                onClick={onAction}
-                className="rounded-full bg-foreground px-5 py-2 text-sm text-background hover:opacity-90 text-center"
-                >
-                Sign up
-            </Link>
-        </div>
-    );
+  if (!isLoaded) return null;
+
+  if (isSignedIn) {
+
+    return (
+  <div className="flex items-center gap-3">
+    {isProUser !== null && (
+      <span
+        className={`text-xs font-semibold px-3 py-1 rounded-full border transition-all
+        ${
+          isProUser
+            ? "bg-gradient-to-r from-yellow-500/10 to-yellow-400/10 text-yellow-600 border-yellow-400/10"
+            : "bg-neutral-900 text-gray-400 border-neutral-800"
+        }`}
+      >
+        {isProUser ? "PRO" : "FREE"}
+      </span>
+    )}
+
+      <UserButton
+        appearance={{
+          elements: {
+            userButtonAvatarBox: "size-8",
+          },
+        }}
+      />
+  </div>
+);
+  }
+
+  return (
+      <div className={`flex ${mobile ? "flex-col gap-3 mt-4" : "items-center gap-4"}`}>
+          <Link
+              href="/sign-in"
+              onClick={onAction}
+              className="text-sm text-foreground/80 hover:text-foreground"
+              >
+              Sign in
+          </Link>
+
+          <Link
+              href="/sign-up"
+              onClick={onAction}
+              className="rounded-full bg-foreground px-5 py-2 text-sm text-background hover:opacity-90 text-center"
+              >
+              Sign up
+          </Link>
+      </div>
+  );
 }
 
 export const NavbarClient = () => {
