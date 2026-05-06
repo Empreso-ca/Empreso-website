@@ -42,9 +42,14 @@ export const Careers = ({ jobs }: { jobs: Job[] }) => {
                 <h3 className="text-lg font-semibold">{j.title}</h3>
 
                 {/* Job type */}
-                <p className="mt-2 text-xs uppercase tracking-wider text-muted-foreground">
-                  {j.jobType}
-                </p>
+                <div className='flex flex-wrap justify-between mt-2 text-xs uppercase tracking-wider text-muted-foreground'>
+                  <b>
+                    {j.companyName}
+                  </b>
+                  <p>
+                    {j.jobType}
+                  </p>
+                </div>
 
                 {/* Meta info */}
                 <div className="mt-4 space-y-2 text-xs text-muted-foreground">

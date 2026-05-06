@@ -2,14 +2,15 @@
 import { prisma } from "@/lib/prisma";
 
 export async function getJobs() {
-  return await prisma.job.findMany({
-    where: {
-      status: "ACTIVE",
-    },
-    orderBy: {
-      postedAt: "desc",
-    },
-  });
+  try {
+    return await prisma.job.findMany({
+      where: { status: "ACTIVE" },
+      orderBy: { postedAt: "desc" },
+    });
+  } catch (error) {
+    console.error("Database error in getJobs:", error);
+    throw new Error("Unable to fetch jobs at the moment");
+  }
 }
 
 export async function getJobById(jobId: number) {

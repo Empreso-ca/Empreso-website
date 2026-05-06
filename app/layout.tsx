@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
+import FloatingButton from "@/components/AiFolatingButton";
 
 export const metadata: Metadata = {
   title: "Empreso",
@@ -28,6 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
           <Navbar />
           {children}
+          <FloatingButton />
           <Footer />
         </ClerkProvider>
       </body>
