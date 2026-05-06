@@ -57,14 +57,51 @@ function StatsDisplay () {
     ];
     
     return (
-        <CustomGrid stats={stats} cols={3}/>
-    );
+        <main className="relative bg-background text-foreground border-b border-white/[0.1]">
+          <section
+            className={cn(
+              "relative mx-auto max-w-7xl border border-white/[0.1]"
+            )}
+          > 
+            <div className={cn("grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3")}>
+              {stats.map((s, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "p-8 text-center border-white/[0.1]",
+                    "border",
+    
+                    "[&:nth-child(2n)]:border-r-0",
+                    "[&:nth-last-child(-n+2)]:border-b-0",
+    
+                    "md:[&:nth-child(2n)]:border-r md:[&:nth-child(3n)]:border-r-0",
+                    "md:[&:nth-last-child(-n+2)]:border-b md:[&:nth-last-child(-n+3)]:border-b-0"
+                  )}
+                >
+                  {typeof s.v === "string" ? 
+                    <p className="font-mono-display text-3xl font-bold sm:text-4xl">
+                      {s.v}
+                    </p> : s.v 
+                  }
+                  <p className="mt-2 text-sm text-muted-foreground">{s.l}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </main>
+      );
 }
 
 
 function ExpertiseSection() {
     return (
-        <div>
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-1/2 w-full max-w-7xl -translate-x-1/2">
+            <div className="relative h-full">
+              <div className="absolute left-0 top-0 h-full w-px bg-white/10" />
+              <div className="absolute right-0 top-0 h-full w-px bg-white/10" />
+            </div>
+          </div>
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-semibold mb-4">
                     Our Expertise
@@ -115,6 +152,12 @@ const features = [
 function CareerAcceleration() {
   return (
     <section className="relative">
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 w-full max-w-7xl -translate-x-1/2">
+        <div className="relative h-full">
+          <div className="absolute left-0 top-0 h-full w-px bg-white/10" />
+          <div className="absolute right-0 top-0 h-full w-px bg-white/10" />
+        </div>
+      </div>
       {/* subtle grid background */}
       <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
 

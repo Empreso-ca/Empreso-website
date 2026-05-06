@@ -10,10 +10,11 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <LogoHome logos={["LinkedIn", "Indeed", "Glassdoor", "Workday", "Greenhouse"]}/>
-      <div className="h-2 diagonal-bg opacity-60 border-white/[0.1]" />
-      <Body />
-      {/* <Careers /> */}
+      <div>
+        <LogoHome />
+        {/* <div className="h-2 diagonal-bg opacity-60 border-white/[0.1]" /> */}
+        <Body />
+      </div>
       <Community />
     </main>
   );

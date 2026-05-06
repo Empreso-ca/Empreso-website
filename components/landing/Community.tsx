@@ -3,7 +3,7 @@
 const testimonials = [
     {
       quote: "I was struggling to get interview calls, but Empreso helped me refine my resume and improve my coding skills. Now, I'm working as a Python Developer at a top company!",
-      name: "Charlotte Carter",
+      name: "Shashank",
       title: "Python Developer"
     },
     {
