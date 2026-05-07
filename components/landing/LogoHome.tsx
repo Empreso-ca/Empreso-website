@@ -26,20 +26,9 @@ export const LogoHome = () => {
 
 const Cell = ({ svg, link }: Logo) => {
   return (
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative flex flex-col items-center justify-center overflow-hidden border border-white/[0.1] px-6 py-10 transition-all duration-300"
-    >
-      <div className="transition-all duration-300 group-hover:-translate-y-2 group-hover:opacity-100">
-        {svg}
-      </div>
-      <div className="pointer-events-none absolute bottom-4 flex items-center gap-1 text-xs text-white/80 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-        <span>Open</span>
-        <ArrowUpRight className="w-3 h-3" />
-      </div>
-    </a>
+    <div className="group relative flex flex-col items-center justify-center overflow-hidden border border-white/[0.1] px-6 py-10 transition-all duration-300">
+      {svg}
+    </div>
   );
 };
 
