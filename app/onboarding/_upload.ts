@@ -32,7 +32,7 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
   // - Safe chars: a-z A-Z 0-9 - _ .
   const safeUserId = user.id.replace(/[^a-zA-Z0-9_-]/g, "_");
   const ext = (file.name.split(".").pop() ?? "pdf").toLowerCase();
-  const storagePath = `${safeUserId}/resume.${ext}`; // e.g. "user_2abc/resume.pdf"
+  const storagePath = `users/${safeUserId}/master/latest_resume.${ext}`; // e.g. "users/user_2abc/master/resume.pdf"
 
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);

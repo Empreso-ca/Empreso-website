@@ -1,35 +1,93 @@
-import { getResumeFromSupabase } from '@/app/api/resumeService';
-import { getUserId } from '@/app/api/user';
+'use client'
+import { getUserId, getUserResume } from '@/app/api/user';
 import NewResume from '@/components/NewResume';
 import { Card } from '@/components/ui/Card';
 import { getJobById } from '@/app/api/Jobs';
 import { getApplication } from '@/app/api/applications';
-import ApplyActions from '@/components/ApplyAction';
+import ApplyActions from './ApplyAction';
 import { OpenResumeButton } from '@/components/OpenResumeButton';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import { use, useState, useEffect } from 'react';
 
-const Page = async ({ params }: { params: { jobId: string } }) => {
-  const { jobId } = await params;
+type PageProps = {
+  params: Promise<{
+    jobId: string;
+  }>;
+};
+
+
+const Page = ({ params }: PageProps) => {
+  const { jobId } = use(params);
   const jobIdNumber = Number(jobId);
+  const [newResumeFile, setNewResumeFile] = useState<File | null>(null);
+  const [job, setJob] = useState<any>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userResumeUrl, setUserResumeUrl] = useState<string | null>(null);
+  const [application, setApplication] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!jobIdNumber) {
-    return <div className="p-10 text-center">Invalid job ID</div>;
+  const loadPageData = async () => {
+    try {
+      setLoading(true);
+
+      const [jobData, fetchedUserId] =
+        await Promise.all([
+          getJobById(jobIdNumber),
+          getUserId(),
+        ]);
+
+      if (!fetchedUserId) {
+        setError('Unauthorized');
+        setLoading(false);
+        return;
+      }
+
+      setJob(jobData);
+      setUserId(fetchedUserId);
+
+      const [resumeUrl, applicationData] = await Promise.all([
+        getUserResume(fetchedUserId),
+        getApplication(fetchedUserId, jobIdNumber),
+      ]);
+
+      setUserResumeUrl(resumeUrl);
+      setApplication(applicationData);
+
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!jobIdNumber) {
+      setError('Invalid job ID');
+      setLoading(false);
+      return;
+    }
+    loadPageData();
+  }, [jobIdNumber]);
+
+  // Loading UI
+  if (!userId || loading) {
+    return (
+      <div className="p-10 text-center">
+        Loading...
+      </div>
+    );
   }
-  
-  
-  const [job, userId] = await Promise.all([
-    getJobById(jobIdNumber),
-    getUserId(),
-  ]);
 
-  if (!userId) {
-    return <div className="p-10 text-center">Unauthorized</div>;
+  // Error UI
+  if (error) {
+    return (
+      <div className="p-10 text-center">
+        {error}
+      </div>
+    );
   }
-
-  const [application, resumeUrl] = await Promise.all([
-    getApplication(userId, jobIdNumber),
-    getResumeFromSupabase(userId).catch(() => null),
-  ]);
 
   const alreadyApplied = !!application;
 
@@ -55,7 +113,7 @@ const Page = async ({ params }: { params: { jobId: string } }) => {
               <span className="text-white">{application.status}</span>
             </p>
 
-            {resumeUrl && (
+            {application.resume && (
               <div className="mt-6 flex items-center justify-between p-4 border border-border rounded-lg">
                 <div>
                   <p className="font-medium">Your Resume</p>
@@ -64,7 +122,7 @@ const Page = async ({ params }: { params: { jobId: string } }) => {
                   </p>
                 </div>
 
-                <OpenResumeButton url={resumeUrl} />
+                <OpenResumeButton url={application.resume} />
               </div>
             )}
           </Card>
@@ -75,7 +133,7 @@ const Page = async ({ params }: { params: { jobId: string } }) => {
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Existing Resume */}
-            {resumeUrl && (
+            {userResumeUrl && (
               <Card className="p-6 flex flex-col gap-4">
                 <h3 className="text-lg font-semibold">
                   Use existing resume
@@ -93,10 +151,10 @@ const Page = async ({ params }: { params: { jobId: string } }) => {
                     </p>
                   </div>
 
-                  <OpenResumeButton url={resumeUrl} />
+                  <OpenResumeButton url={userResumeUrl} />
                 </div>
 
-                <ApplyActions userId={userId} jobId={jobIdNumber} />
+                <ApplyActions userId={userId} jobId={jobIdNumber} refresh={loadPageData}/>
               </Card>
             )}
 
@@ -109,11 +167,16 @@ const Page = async ({ params }: { params: { jobId: string } }) => {
               <p className="text-sm text-muted-foreground">
                 Use a fresh resume for better chances.
               </p>
+              <NewResume onFileSelect={setNewResumeFile} />
 
-              <NewResume
-                userId={userId}
-                jobId={jobIdNumber.toString()}
-              />
+              {newResumeFile && (
+                <ApplyActions
+                  userId={userId}
+                  jobId={jobIdNumber}
+                  newResume={newResumeFile}
+                  refresh={loadPageData}
+                />
+              )}
             </Card>
           </div>
         )}
