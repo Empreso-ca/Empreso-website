@@ -268,7 +268,7 @@ export default function TrainingPage() {
           Empreso Training
         </p>
 
-        <h1 className="mt-6 font-mono-display text-5xl font-bold leading-tight sm:text-6xl">
+        <h1 className="mt-6 font-mono-display text-5xl leading-tight sm:text-6xl">
           Industry-Ready Skills & Career Paths
         </h1>
 

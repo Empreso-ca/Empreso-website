@@ -69,7 +69,7 @@ function StatsDisplay () {
                   key={i}
                   className={cn(
                     "p-8 text-center border-white/[0.1]",
-                    "border",
+                    "border font-mono",
     
                     "[&:nth-child(2n)]:border-r-0",
                     "[&:nth-last-child(-n+2)]:border-b-0",
@@ -78,11 +78,7 @@ function StatsDisplay () {
                     "md:[&:nth-last-child(-n+2)]:border-b md:[&:nth-last-child(-n+3)]:border-b-0"
                   )}
                 >
-                  {typeof s.v === "string" ? 
-                    <p className="font-mono-display text-3xl font-bold sm:text-4xl">
-                      {s.v}
-                    </p> : s.v 
-                  }
+                  {s.v}
                   <p className="mt-2 text-sm text-muted-foreground">{s.l}</p>
                 </div>
               ))}
@@ -103,7 +99,7 @@ function ExpertiseSection() {
             </div>
           </div>
             <div className="flex flex-col items-center justify-center min-h-screen">
-                <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-semibold mb-4">
+                <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-mono mb-4">
                     Our Expertise
                 </h2>
                 {/* Desktop version */}
@@ -212,11 +208,11 @@ function CareerAcceleration() {
 
         {/* Bottom CTA */}
         <div className="mt-20 flex flex-col items-center gap-4 rounded-2xl border border-border/70 bg-card/40 p-12 text-center">
-          <h3 className="font-mono-display text-3xl font-bold sm:text-4xl">
+          <h3 className="font-mono-display text-3xl sm:text-4xl">
             Start your journey today
           </h3>
 
-          <p className="max-w-xl text-sm text-muted-foreground">
+          <p className="max-w-xl font-mono text-sm text-muted-foreground">
             Build your profile, improve your skills, and land better opportunities faster.
           </p>
 

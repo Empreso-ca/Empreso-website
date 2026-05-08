@@ -22,7 +22,7 @@ export const Hero = () => {
             <Terminal className="h-3 w-3" />
             <span>Empreso AI is live now.</span>
             <span className="text-foreground underline decoration-dotted underline-offset-4">
-              Chat with our AI.
+              Chat with our <span className="font-mono">AI.</span>
             </span>
           </a>
         </div>
@@ -108,7 +108,7 @@ export const Hero = () => {
               </svg>
             </div>
 
-            <div className="font-mono-display text-lg sm:text-2xl md:text-4xl dark:text-neutral-200">
+            <div className="font-mono text-lg sm:text-2xl md:text-4xl dark:text-neutral-200">
               <p>Stop Applying.</p>
               <p>Start Getting Hired!</p>
             </div>

@@ -123,10 +123,10 @@ function Faq02() {
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                     FAQs
                 </p>
-                <h2 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
+                <h2 className="mt-6 text-4xl font-mono tracking-tight sm:text-5xl">
                     Frequently Asked Questions
                 </h2>
-                <p className="mt-5 text-base text-muted-foreground">
+                <p className="mt-5 font-mono text-base text-muted-foreground">
                     Everything you need to know about our platform
                 </p>
             </div>

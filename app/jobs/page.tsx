@@ -10,7 +10,7 @@ export default async function JobsPage () {
             <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
             <section className="relative mx-auto max-w-5xl px-6 py-24 text-center">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Jobs</p>
-                <h1 className="mt-6 font-mono-display text-5xl font-bold leading-tight sm:text-6xl">
+                <h1 className="mt-6 font-mono-display text-5xl leading-tight sm:text-6xl">
                     Find Your Next Chapter
                 </h1>
                 <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">

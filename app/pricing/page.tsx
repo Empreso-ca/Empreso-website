@@ -22,7 +22,7 @@ const plans = [
   // },
   {
     name: "Pro",
-    price: "$250",
+    price: "$25",
     cta: "Get Started",
     highlighted: true,
     disabled: true,

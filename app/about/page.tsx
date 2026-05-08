@@ -56,7 +56,7 @@ export default function AboutPage() {
       <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
       <section className="relative mx-auto max-w-5xl px-6 py-24 text-center">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">About empreso</p>
-        <h1 className="mt-6 font-mono-display text-5xl font-bold leading-tight sm:text-6xl">
+        <h1 className="mt-6 font-mono-display text-5xl leading-tight sm:text-6xl">
           Empreso AI - The Future of Job Hunting
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
@@ -74,7 +74,7 @@ export default function AboutPage() {
                 {c.subtitle}
               </p>
 
-              <h3 className="mt-3 text-lg font-semibold">{c.t}</h3>
+              <h3 className="mt-3 text-lg font-mono">{c.t}</h3>
 
               <ul className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
                 {c.points.map((p, i) => (

@@ -222,9 +222,9 @@ const AIResumeOptimizer: React.FC = () => {
           <div className="text-center mb-16 relative">
             <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-gradient-to-r from-emerald-600/20 to-cyan-600/20 rounded-full filter blur-3xl opacity-30 animate-pulse" />
             
-            <h1 className="text-3xl font-sans tracking-tighter text-white drop-shadow-lg sm:text-4xl md:text-5xl relative">
+            <h1 className="text-3xl font-mono-display tracking-tighter text-white drop-shadow-lg sm:text-4xl md:text-5xl relative">
               <span className="inline-block relative">
-                <span className="absolute -inset-1 w-full h-full bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-50 blur-lg rounded-lg"></span>
+                {/* <span className="absolute -inset-1 w-full h-full bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-50 blur-lg rounded-lg"></span> */}
                 <span className="relative bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                   AI-Powered
                 </span>
@@ -400,7 +400,7 @@ const AIResumeOptimizer: React.FC = () => {
           {/* Submit Button */}
           <div className="mt-12 text-center flex flex-wrap justify-center gap-4">
           <button 
-            className="relative group px-8 py-4 bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-full text-white font-bold text-lg transition transform hover:scale-[1.02] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+            className="relative group px-8 py-4 bg-[#0B1020]/95 rounded-2xl text-white text-lg transition transform hover:scale-[1.02] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed border border-white/10"
             disabled={!resumeFile || !jobDescription || isProcessing}
             onClick={handleSubmit}
           >
@@ -420,21 +420,29 @@ const AIResumeOptimizer: React.FC = () => {
                 </>
               )}
             </span>
-            <span className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 blur transition-all duration-500 group-hover:opacity-70" />
           </button>
           
           {/* Empreso AI Button */}
-          <a 
-            href="https://ai.empreso.ca" 
-            target="_blank" 
+          <a
+            href="https://ai.empreso.ca"
+            target="_blank"
             rel="noopener noreferrer"
-            className="relative group px-8 py-4 bg-gradient-to-br from-red-500 to-cyan-300 rounded-full text-white font-bold text-lg transition transform hover:scale-[1.02] hover:shadow-lg"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl p-[1.5px] transition-all duration-300 hover:scale-[1.03]"
           >
-            <span className="flex items-center justify-center gap-2">
-              <FiExternalLink className="w-5 h-5" />
-              <span>Chat With Empreso AI</span>
+            {/* Glow */}
+            <span className="absolute inset-0 rounded-2xl blur-xl bg-cyan-400/30 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            {/* Main Button */}
+            <span className="relative z-10 flex items-center gap-3 rounded-2xl bg-[#0B1020]/95 px-8 py-4 backdrop-blur-xl border border-white/10">
+              <FiExternalLink className="h-5 w-5 text-cyan-300 transition-transform duration-300 group-hover:rotate-12" />
+
+              <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-lg font-semibold text-transparent tracking-wide">
+                Chat With Empreso AI
+              </span>
+
+              {/* AI Shine Effect */}
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
             </span>
-            <span className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 opacity-0 blur transition-all duration-500 group-hover:opacity-70" />
           </a>
         </div>
 

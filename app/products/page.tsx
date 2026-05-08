@@ -50,7 +50,7 @@ export default function SolutionsPage() {
               <div className="inline-flex rounded-lg bg-secondary p-3">
                 <s.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-5 text-lg font-semibold">{s.t}</h3>
+              <h3 className="mt-5 text-lg font-mono">{s.t.toUpperCase()}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
               <a href="#" className="mt-5 inline-flex items-center gap-1 text-sm text-foreground hover:underline">
                 Learn more <ArrowUpRight className="h-4 w-4" />
