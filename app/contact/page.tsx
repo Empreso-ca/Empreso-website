@@ -37,8 +37,8 @@ export default function ContactPage() {
                 </div>
               </div>
               <div>
-                <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Work email</label>
-                <Input type="email" placeholder="john@gmail/company.com" />
+                <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Your email</label>
+                <Input type="email" placeholder="johndoe@gmail.com" />
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-wider text-muted-foreground">Company</label>

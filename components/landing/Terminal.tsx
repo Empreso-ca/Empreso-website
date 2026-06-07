@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 const terminalLines = [
-  'visit empreso.ca',
+  'visit empreso.in',
   'empreso --service overview',
   '✓ Resume Optimization',
   '✓ Interview Prep',

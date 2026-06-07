@@ -2,6 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
+import { auth } from "@clerk/nextjs/server"
 
 const BUCKET = "resumes";
 
@@ -55,5 +56,32 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
   }
 
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
-  return { url: data.publicUrl };
+  
+  const publicUrl = data.publicUrl;
+  const { getToken } = await auth();
+  const TOKEN = await getToken({ template : "fastapi" })
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/upload/save-existing`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      body: JSON.stringify({
+        file_url: publicUrl,
+        filename: file.name,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Failed to save resume record: ${err}`);
+  }
+
+  return {
+    url: publicUrl,
+  };
 }
