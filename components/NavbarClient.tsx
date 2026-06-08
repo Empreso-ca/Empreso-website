@@ -5,17 +5,9 @@ import Link from "next/link";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { Button } from "../ui/Button";
 
 const navItems = [
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about" },
-  { label: "Products", href: "/products" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Training", href: "/training" },
-  { label: "Jobs", href: "/jobs" },
-  { label: "ATS-Checker", href: "/ats-check"},
-  { label: "Contact", href: "/contact" },
+  { label: "", href: "/" },
 ];
 
 
@@ -24,61 +16,52 @@ function NavbarAuthButtons({mobile = false,onAction,}: {mobile?: boolean;onActio
   const [isProUser, setIsProUser] = useState<boolean | null>(null);
   const { getToken } = useAuth();
 
-  // useEffect(() => {
-  //   async function fetchPro() {
-  //     const token = await getToken({ template : "fastapi" })
-  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/is-pro`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //     });
-  //     const data = await res.json();
-  //     setIsProUser(data.isPro);
-  //   }
+  useEffect(() => {
+    async function fetchPro() {
+      const token = await getToken({ template : "fastapi" })
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/is-pro`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+      });
+      const data = await res.json();
+      setIsProUser(data.isPro);
+    }
 
-  //   if (isSignedIn) fetchPro();
-  // }, [isSignedIn]);
+    if (isSignedIn) fetchPro();
+  }, [isSignedIn]);
 
   if (!isLoaded) return null;
 
   if (isSignedIn) {
 
-    return (
-  <div className="flex items-center gap-3">
-    {/* {isProUser !== null && (
-      <span
-        className={`text-xs font-semibold px-3 py-1 rounded-full border transition-all
-        ${
-          isProUser
-            ? "bg-gradient-to-r from-yellow-500/10 to-yellow-400/10 text-yellow-600 border-yellow-400/10"
-            : "bg-neutral-900 text-gray-400 border-neutral-800"
-        }`}
-      >
-        {isProUser ? "PRO" : "FREE"}
-      </span>
-    )} */}
-    <Link href={`/console`}>
-      <Button variant={'default'}
-        className={`text-xs font-semibold px-1 py-1 rounded-full `}
-      >
-        <p className="mx-5">
-          Go To Console 
-        </p>
-        <UserButton
-          appearance={{
-            elements: {
-              userButtonAvatarBox: "size-8",
-            },
-          }}
-        />
-      </Button>
-    </Link>
+  return (
+    <div className="flex items-center gap-3">
+      {isProUser !== null && (
+        <span
+          className={`text-xs font-semibold px-3 py-1 rounded-full border transition-all
+          ${
+            isProUser
+              ? "bg-gradient-to-r from-yellow-500/10 to-yellow-400/10 text-yellow-600 border-yellow-400/10"
+              : "bg-neutral-900 text-gray-400 border-neutral-800"
+          }`}
+        >
+          {isProUser ? "PRO" : "FREE"}
+        </span>
+      )}
 
-  </div>
-);
-  }
+      <UserButton
+        appearance={{
+          elements: {
+            userButtonAvatarBox: "size-6",
+          },
+        }}
+      />
+    </div>
+  );
+}
 
   return (
       <div className={`flex ${mobile ? "flex-col gap-3 mt-4" : "items-center gap-4"}`}>
@@ -113,18 +96,6 @@ export const NavbarClient = () => {
 
   return (
     <>
-      {/* Desktop Nav */}
-      <nav className="hidden lg:flex items-center gap-7">
-        {navItems.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
 
       {/* Right Side */}
       <div className="flex items-center gap-4">
@@ -161,21 +132,7 @@ export const NavbarClient = () => {
 
         {/* Nav Items */}
         <div className="flex flex-col px-6 py-6 gap-5">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={closeMenu}
-              className="text-base text-foreground/90 hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          {/* Divider */}
-          <div className="border-t pt-4">
             <NavbarAuthButtons mobile onAction={closeMenu}/>
-          </div>
         </div>
       </div>
     </>

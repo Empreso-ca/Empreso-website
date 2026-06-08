@@ -1,6 +1,5 @@
-import { ArrowUpRight, Bot, Brain, Cloud, Code2, Database, Workflow, FileText } from "lucide-react";
+import { ArrowUpRight, Bot, Brain, Code2, Workflow, FileText } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { LogoProds } from "@/components/landing/LogoProducts";
 
 const solutions = [

@@ -1,5 +1,5 @@
 'use client';
-import { createApplication } from '@/app/api/applications';
+import { createApplication } from '@/lib/applications';
 import { Button } from '@/components/ui/Button';
 
 export default function ApplyActions({

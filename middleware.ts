@@ -2,7 +2,8 @@ import { clerkMiddleware, createRouteMatcher, clerkClient } from "@clerk/nextjs/
 import { NextRequest, NextResponse } from "next/server";
 
 const isPrivateRoute = createRouteMatcher([
-  "/jobs/verify-details(.*)"
+  "/jobs/verify-details(.*)",
+  "/console(.*)"
 ]);
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
 

@@ -1,5 +1,5 @@
 import { Careers } from "@/components/Careers";
-import { getJobs } from "../api/Jobs";
+import { getJobs } from "@/lib/jobs";
 
 export const dynamic = "force-dynamic";
 
