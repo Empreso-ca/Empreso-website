@@ -115,6 +115,9 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
 // ─── Step Forms ───────────────────────────────────────────────────────────────
 
 function StepPersonal({ saved }: { saved: Record<string, unknown> }) {
+  const { user } = useUser();
+  const defaultEmail = user?.primaryEmailAddress?.emailAddress ?? (saved.email as string);
+
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div>
@@ -127,7 +130,7 @@ function StepPersonal({ saved }: { saved: Record<string, unknown> }) {
       </div>
       <div>
         <Label>Email *</Label>
-        <Input name="email" type="email" placeholder="jane@example.com" defaultValue={saved.email as string} required />
+        <Input name="email" type="email" placeholder="jane@example.com" defaultValue={defaultEmail} readOnly required disabled />
       </div>
       <div>
         <Label>Phone *</Label>

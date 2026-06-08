@@ -4,6 +4,8 @@ import { useUser, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { Button } from "../ui/Button";
 
 const navItems = [
   { label: "Services", href: "/services" },
@@ -20,16 +22,24 @@ const navItems = [
 function NavbarAuthButtons({mobile = false,onAction,}: {mobile?: boolean;onAction?: () => void;}) {
   const { isSignedIn, isLoaded } = useUser();
   const [isProUser, setIsProUser] = useState<boolean | null>(null);
+  const { getToken } = useAuth();
 
-  useEffect(() => {
-    async function fetchPro() {
-      const res = await fetch("/api/user/is-pro");
-      const data = await res.json();
-      setIsProUser(data.isPro);
-    }
+  // useEffect(() => {
+  //   async function fetchPro() {
+  //     const token = await getToken({ template : "fastapi" })
+  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/is-pro`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //     });
+  //     const data = await res.json();
+  //     setIsProUser(data.isPro);
+  //   }
 
-    if (isSignedIn) fetchPro();
-  }, [isSignedIn]);
+  //   if (isSignedIn) fetchPro();
+  // }, [isSignedIn]);
 
   if (!isLoaded) return null;
 
@@ -37,7 +47,7 @@ function NavbarAuthButtons({mobile = false,onAction,}: {mobile?: boolean;onActio
 
     return (
   <div className="flex items-center gap-3">
-    {isProUser !== null && (
+    {/* {isProUser !== null && (
       <span
         className={`text-xs font-semibold px-3 py-1 rounded-full border transition-all
         ${
@@ -48,15 +58,24 @@ function NavbarAuthButtons({mobile = false,onAction,}: {mobile?: boolean;onActio
       >
         {isProUser ? "PRO" : "FREE"}
       </span>
-    )}
+    )} */}
+    <Link href={`${process.env.NEXT_PUBLIC_CONSOLE_URL}`}>
+      <Button variant={'default'}
+        className={`text-xs font-semibold px-1 py-1 rounded-full `}
+      >
+        <p className="mx-5">
+          Go To Console 
+        </p>
+        <UserButton
+          appearance={{
+            elements: {
+              userButtonAvatarBox: "size-8",
+            },
+          }}
+        />
+      </Button>
+    </Link>
 
-      <UserButton
-        appearance={{
-          elements: {
-            userButtonAvatarBox: "size-8",
-          },
-        }}
-      />
   </div>
 );
   }

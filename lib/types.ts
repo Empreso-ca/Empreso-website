@@ -1,22 +1,35 @@
 
-import {
-    JobType as PrismaJobType,
-    JobStatus as PrismaJobStatus,
-    ApplicationStatus as PrismaApplicationStatus,
-    PlanType as PrismaPlanType,
-} from "@prisma/client";
 
-export type JobType = PrismaJobType;
-export const JobType = PrismaJobType;
+export enum JobType {
+    FULL_TIME = "FULL_TIME",
+    PART_TIME = "PART_TIME",
+    CONTRACT = "CONTRACT",
+    INTERNSHIP = "INTERNSHIP",
+    FREELANCE = "FREELANCE",
+    REMOTE = "REMOTE",
+}
 
-export type JobStatus = PrismaJobStatus;
-export const JobStatus = PrismaJobStatus;
+export enum JobStatus {
+    DRAFT = "DRAFT",
+    ACTIVE = "ACTIVE",
+    CLOSED = "CLOSED",
+    EXPIRED = "EXPIRED",
+}
 
-export type ApplicationStatus = PrismaApplicationStatus;
-export const ApplicationStatus = PrismaApplicationStatus;
+export enum ApplicationStatus {
+    PENDING = "PENDING",
+    REVIEWED = "REVIEWED",
+    SHORTLISTED = "SHORTLISTED",
+    REJECTED = "REJECTED",
+    HIRED = "HIRED",
+}
 
-export type PlanType = PrismaPlanType;
-export const PlanType = PrismaPlanType;
+export enum PlanType {
+    FREE = "FREE",
+    BASIC = "BASIC",
+    PREMIUM = "PREMIUM",
+    ENTERPRISE = "ENTERPRISE",
+}
 
 
 

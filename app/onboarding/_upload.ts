@@ -2,9 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
-import { auth } from "@clerk/nextjs/server"
 
-const BUCKET = "resumes";
 
 export async function uploadResumeAction(formData: FormData): Promise<{ url: string }> {
   const user = await currentUser();
@@ -18,48 +16,36 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ];
+
   if (!allowedTypes.includes(file.type)) {
     throw new Error("Only PDF and Word documents are accepted.");
   }
 
-  const MAX_MB = 5;
-  if (file.size > MAX_MB * 1024 * 1024) {
-    throw new Error(`File must be under ${MAX_MB}MB.`);
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error("File must be under 5MB.");
   }
 
-  // Supabase Storage rules:
-  // - Path must NOT start with "/"
-  // - Each segment must be non-empty
-  // - Safe chars: a-z A-Z 0-9 - _ .
   const safeUserId = user.id.replace(/[^a-zA-Z0-9_-]/g, "_");
-  const ext = (file.name.split(".").pop() ?? "pdf").toLowerCase();
-  const storagePath = `users/${safeUserId}/master/latest_resume.${ext}`; // e.g. "users/user_2abc/master/resume.pdf"
+  const ext = file.name.split(".").pop()?.toLowerCase() || "pdf";
 
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  const storagePath = `users/${safeUserId}/master/resume.${ext}`;
+
+  const buffer = Buffer.from(await file.arrayBuffer());
 
   const { error } = await supabase.storage
-    .from(BUCKET)
+    .from("resumes")
     .upload(storagePath, buffer, {
       contentType: file.type,
       upsert: true,
     });
 
-  if (error) {
-    console.error("[resume-upload] Supabase error:", {
-      message: error.message,
-      storagePath,
-      bucket: BUCKET,
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    });
-    throw new Error(`Upload failed: ${error.message}`);
-  }
+  if (error) throw new Error(error.message);
 
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
-  
+  const { data } = supabase.storage
+    .from("resumes")
+    .getPublicUrl(storagePath);
+
   const publicUrl = data.publicUrl;
-  const { getToken } = await auth();
-  const TOKEN = await getToken({ template : "fastapi" })
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/upload/save-existing`,
@@ -67,9 +53,9 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`,
       },
       body: JSON.stringify({
+        userId: user.id,
         file_url: publicUrl,
         filename: file.name,
       }),
@@ -81,7 +67,5 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
     throw new Error(`Failed to save resume record: ${err}`);
   }
 
-  return {
-    url: publicUrl,
-  };
+  return { url: publicUrl };
 }

@@ -1,26 +1,31 @@
 'use server'
 
-import { prisma } from '@/lib/prisma';
-import { Application } from '@/lib/types';
-import { revalidatePath } from 'next/cache';
-import { supabase } from '@/lib/supabase';
+export async function getApplication(userId: string, jobId: number) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/application/get`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        jobId,
+      }),
+      cache: "no-store",
+    }
+  );
 
-const BUCKET = "resumes"
+  if (!res.ok) return null;
 
-export async function getApplication(userId: string, jobId: number) : Promise<Application | null> {
-  const application = await prisma.application.findFirst({
-    where: {
-      userId,
-      jobId,
-    },
-  });
+  const data = await res.json();
 
-  if (!application) return null;
-
-  return {
-    ...application,
-    resume: application.resume ?? undefined,
-  };
+  return data
+    ? {
+        ...data,
+        resume: data.resume ?? undefined,
+      }
+    : null;
 }
 
 
@@ -31,53 +36,29 @@ export async function createApplication(formData: FormData) {
 
   if (!userId || !jobId) return;
 
-  const existing = await prisma.application.findFirst({
-    where: { userId, jobId },
-  });
+  const apiForm = new FormData();
 
-  if (existing) return;
-
-  let resumeUrl: string | null = null;
+  apiForm.append("userId", userId);
+  apiForm.append("jobId", String(jobId));
 
   if (newResume && newResume.size > 0) {
-    const filePath = `users/${userId}/application/job-${jobId}/${newResume.name}`;
-
-    const { error } = await supabase.storage
-      .from(BUCKET)
-      .upload(filePath, newResume, {
-        upsert: true,
-        contentType: newResume.type,
-      });
-
-    if (error) {
-      console.error("Upload error:", error);
-      return;
-    }
-
-    const { data } = supabase.storage
-      .from(BUCKET)
-      .getPublicUrl(filePath);
-
-    resumeUrl = data.publicUrl;
+    apiForm.append("newResume", newResume);
   }
 
-  const user = await prisma.user.findUnique({
-    where: { userId },
-    select: { resume: true },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/application/create`,
+    {
+      method: "POST",
+      body: apiForm,
+    }
+  );
 
-  const finalResume = resumeUrl || user?.resume;
+  if (!res.ok) {
+    console.error("Failed to create application");
+    return;
+  }
 
-  if (!finalResume) return;
+  const data = await res.json();
 
-  await prisma.application.create({
-    data: {
-      userId,
-      jobId,
-      resume: finalResume,
-      status: "PENDING",
-    },
-  });
-  
-  revalidatePath(`/jobs/verify-details/${jobId}`);
+  return data;
 }
