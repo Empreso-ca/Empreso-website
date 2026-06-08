@@ -33,7 +33,7 @@ export function Sidebar({
   const active = "bg-muted font-medium"
 
   const topNavItems = [
-    { href: "/", label: "Home", icon: Home },
+    { href: "/console", label: "Home", icon: Home },
     { href: "/console/cv-builder", label: "CV Builder Agent", icon: FileText },
     { href: "/console/cv-builder/editor", label: "LaTeX CV Editor", icon: Code },
     { href: "/console/jobs", label: "Personalised Jobs", icon: DockIcon },
