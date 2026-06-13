@@ -1,6 +1,4 @@
 import AIResumeOptimizer from '@/components/EmpresoAI'
-// import HandWrittenTitle from '@/components/ui/coming-soon'
-import React from 'react'
 
 const page = () => {
   return (

@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);

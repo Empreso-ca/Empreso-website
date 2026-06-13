@@ -1,9 +1,7 @@
 'use client'
-import { getUserId, getUserResume } from '@/lib/user';
+import { getUserId, getUserResume, getJobById, getApplication } from '@/lib/api-client';
 import NewResume from '@/components/NewResume';
 import { Card } from '@/components/ui/Card';
-import { getJobById } from '@/lib/jobs';
-import { getApplication } from '@/lib/applications';
 import ApplyActions from './ApplyAction';
 import { OpenResumeButton } from '@/components/OpenResumeButton';
 import MarkdownRenderer from '@/components/MarkdownRenderer';

@@ -1,23 +1,185 @@
+'use server'
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
-export function useApiClient() {
-  const apiFetch = async (
-    url: string,
-    options: RequestInit = {}
-  ) => {
-    return fetch(`${API_URL}${url}`, {
-      ...options,
+
+// ------------------------------
+// USER APIs
+// ------------------------------
+
+export const getUserId = async () => {
+  const { userId } = await auth();
+  return userId;
+};
+
+
+export async function getUser() {
+  const userId = await getUserId();
+  if (!userId) return null;
+  const client = await clerkClient();
+  const user = await client.users.getUser(userId);
+  return user;
+}
+
+
+
+export async function getUserResume(
+  userId: string
+): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `${API_URL}/users/${userId}/resume`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch resume");
+    }
+
+    const data = await response.json();
+
+    return data.resume;
+  } catch (error) {
+    console.error("API error in getUserResume:", error);
+    throw new Error("Unable to fetch Resume at the moment");
+  }
+}
+
+
+// ------------------------------
+// JOB APIs
+// ------------------------------
+
+
+export async function getJobs() {
+  try {
+    const response = await fetch(
+      `${API_URL}/jobs`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch jobs");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("API error in getJobs:", error);
+    throw new Error("Unable to fetch jobs at the moment");
+  }
+}
+
+export async function getJobById(jobId: number) {
+  if (!jobId || isNaN(jobId)) {
+    throw new Error("Invalid job ID");
+  }
+
+  const response = await fetch(
+    `${API_URL}/jobs/${jobId}`,
+    {
+      method: "GET",
+      cache: "no-store",
+    }
+  );
+
+  if (response.status === 404) {
+    throw new Error("Job not found");
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch job");
+  }
+
+  return await response.json();
+}
+
+
+
+// ------------------------------
+// APPLICATION APIs
+// ------------------------------
+
+export async function getApplication(userId: string, jobId: number) {
+  const res = await fetch(
+    `${API_URL}/application/get`,
+    {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...options.headers,
       },
-    });
-  };
+      body: JSON.stringify({
+        userId,
+        jobId,
+      }),
+      cache: "no-store",
+    }
+  );
 
-  return { apiFetch };
+  if (!res.ok) return null;
+
+  const data = await res.json();
+
+  return data
+    ? {
+        ...data,
+        resume: data.resume ?? undefined,
+      }
+    : null;
 }
+
+
+export async function createApplication(formData: FormData) {
+  const userId = formData.get("userId") as string;
+  const jobId = Number(formData.get("jobId"));
+  const newResume = formData.get("newResume") as File;
+
+  if (!userId || !jobId) return;
+
+  const apiForm = new FormData();
+
+  apiForm.append("userId", userId);
+  apiForm.append("jobId", String(jobId));
+
+  if (newResume && newResume.size > 0) {
+    apiForm.append("newResume", newResume);
+  }
+
+  const res = await fetch(
+    `${API_URL}/application/create`,
+    {
+      method: "POST",
+      body: apiForm,
+    }
+  );
+
+  if (!res.ok) {
+    console.error("Failed to create application");
+    return;
+  }
+
+  const data = await res.json();
+
+  return data;
+}
+
+
+
+
+// ----------------------------
+// RESUME PDF & LATEX APIs
+// ----------------------------
 
 
 function pdfBase64ToUrl(pdfBase64: string): string {
@@ -110,7 +272,6 @@ export async function generateResumePDFUrl(
     throw error;
   }
 }
-
 
 
 export async function compileLaTeX(
