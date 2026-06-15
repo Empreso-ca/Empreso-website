@@ -1,7 +1,7 @@
 import { Hero } from "@/components/landing/Hero";
 import { LogoHome } from "@/components/landing/LogoHome";
 import { Community } from "@/components/landing/Community";
-import Body from "@/components/HomeBody";
+import Body from "@/components/landing/HomeBody";
 
 // SERVER COMPONENT - No "use client" directive
 // This significantly improves FCP (First Contentful Paint) and reduces hydration time

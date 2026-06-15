@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import React, { useState, useEffect } from "react";
-import { BentoGrid, BentoGridItem } from "./ui/bento-grid";
+import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import {
   IconBriefcase,
   IconFileText,
@@ -10,7 +10,7 @@ import {
   IconSchool,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-import { CustomGrid } from "./ui/CustomGrid";
+import { CustomGrid } from "../ui/CustomGrid";
 
 const stats_1 = [
   { v: "82%", l: "Placement Success Rate" },

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import MarkdownIt from 'markdown-it';
 import { useState } from 'react';
-import MarkdownRenderer from './MarkdownRenderer';
+import MarkdownRenderer from '../MarkdownRenderer';
 
 type Job = {
   id: number;

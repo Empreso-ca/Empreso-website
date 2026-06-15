@@ -1,4 +1,4 @@
-import { Careers } from "@/components/Careers";
+import { Careers } from "@/components/landing/Careers";
 import { getJobs } from "@/lib/api-client";
 
 export const dynamic = "force-dynamic";

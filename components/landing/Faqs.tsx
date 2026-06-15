@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Card } from "./ui/Card";
+import { Card } from "../ui/Card";
 
 interface FAQItemProps {
     question: string;

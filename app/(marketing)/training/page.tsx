@@ -1,4 +1,4 @@
-import TrainingPage from '@/components/Training'
+import TrainingPage from '@/components/landing/training/Training'
 
 const page = () => {
   return (

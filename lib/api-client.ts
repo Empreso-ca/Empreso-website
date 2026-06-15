@@ -1,8 +1,16 @@
 'use server'
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { Profile, UserPrefill, ProfileCreate, ProfileUpdate } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+
+function authHeaders(token: string | null) {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
 
 
 // ------------------------------
@@ -252,10 +260,7 @@ export async function generateResumePDFUrl(
       `${API_URL}/generate/stream`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(token),
         body: JSON.stringify({ session_id }),
       }
     );
@@ -283,10 +288,7 @@ export async function compileLaTeX(
     `${API_URL}/generate/compile`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeaders(token),
       body: JSON.stringify({
         latex,
       }),
@@ -314,4 +316,68 @@ export async function compileLaTeX(
   return new Blob([bytes], {
     type: "application/pdf",
   });
+}
+
+
+
+
+
+// ----------------------------
+//  PROFILEs APIS
+// ----------------------------
+ 
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // console.log(`Requesting api ${path}`);
+  
+  const res = await fetch(`${API_URL}${path}`, {
+    headers: { "Content-Type": "application/json", ...init?.headers },
+    ...init,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? "Request failed");
+  }
+  if (res.status === 204) return undefined as T;
+  return res.json();
+}
+
+
+export async function loadProfiles(userId: string) {
+  const res = await request<Profile[]>(`/profiles${userId ? `?userId=${userId}` : ""}`);
+  return res;
+}
+
+export async function profilePrefillUser(userId:string) {
+  const res = await request<UserPrefill>(`/profiles/prefill/${userId}`);
+  return res;
+}
+ 
+
+export const createProfile = async (data: ProfileCreate) => {
+  const res = request<Profile>("/profiles", { method: "POST", body: JSON.stringify(data) })
+  return res;
+}
+
+export const updateProfile = async (id: number, data: ProfileUpdate) => {
+  const res = await request<Profile>(`/profiles/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  })
+  return res;
+}
+
+
+export const deleteProfile = async (id: number) => {
+  const res = await request<void>(`/profiles/${id}`, { method: "DELETE" })
+  return res;
+}
+
+export const activateProfile = async (id: number) => {
+  const res = await request<Profile>(`/profiles/${id}/activate`, { method: "POST" })
+  return res;
+}
+
+export const getProfile = async (id: number) => {
+  const res = await request<Profile>(`/profiles/${id}`)
+  return res;
 }

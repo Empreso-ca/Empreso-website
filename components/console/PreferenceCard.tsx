@@ -6,7 +6,7 @@ export function PreferenceCard({
 }: {
   title: string;
   description?: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (

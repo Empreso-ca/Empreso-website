@@ -11,10 +11,9 @@ import {
   Settings,
   SlidersHorizontal,
   PanelLeftOpen,
-  PanelRightClose
+  PanelRightClose,
+  GroupIcon
 } from "lucide-react"
-
-import { Button } from "./ui/Button"
 
 interface SidebarProps {
   collapsed: boolean
@@ -41,8 +40,9 @@ export function Sidebar({
   ]
 
   const bottomNavItems = [
-    { href: "/console/preferences", label: "Preferences", icon: SlidersHorizontal },
+    { href: "/console/profiles", label: "Profiles", icon: GroupIcon },
     { href: "/console/settings", label: "Settings", icon: Settings },
+    { href: "/console/preferences", label: "Preferences", icon: SlidersHorizontal },
   ]
 
 

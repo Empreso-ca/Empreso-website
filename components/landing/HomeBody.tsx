@@ -1,15 +1,15 @@
 'use client'
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { SkillCard } from "./CardGrid"
-import { MobileSkillCard } from "./MobileCardGrid"
-import { CustomGrid } from "./ui/CustomGrid";
+import { SkillCard } from "./training/CardGrid"
+import { MobileSkillCard } from "../MobileCardGrid"
+import { CustomGrid } from "../ui/CustomGrid";
 import { Percent, Building2, Users, FileText, Target, Mic, Shield, BookOpen } from "lucide-react";
-import { Counter } from "./counter";
+import { Counter } from "../counter";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Marquee } from "./ui/marquee";
+import { Marquee } from "../ui/marquee";
 
 export default function Body () {
     return (

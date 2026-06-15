@@ -1,3 +1,4 @@
+// whihch will used by console components 
 import Link from "next/link";
 import { EmpressoLogo } from "@/components/EmpressoLogo";
 import { NavbarClient } from "./NavbarClient";
@@ -22,7 +23,7 @@ export const Navbar = async () => {
               </span>
             </Link>
           </div>
-
+          
           <NavbarClient />
         </div>
       </header>

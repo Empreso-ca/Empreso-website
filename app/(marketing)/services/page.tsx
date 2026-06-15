@@ -1,5 +1,5 @@
-import { EMPRESOBentoGrid } from '@/components/WhatWeDo'
-import { ServiceHead } from '@/components/WhatWeDo'
+import { EMPRESOBentoGrid } from '@/components/landing/WhatWeDo'
+import { ServiceHead } from '@/components/landing/WhatWeDo'
 
 const page = () => {
   return (

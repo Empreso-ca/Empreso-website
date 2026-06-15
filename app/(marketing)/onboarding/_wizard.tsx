@@ -266,69 +266,6 @@ function StepPreferences({ saved }: { saved: Record<string, unknown> }) {
   );
 }
 
-// function StepResume({ saved }: { saved: Record<string, unknown> }) {
-//   return (
-//     <div className="space-y-4">
-//       <div>
-//         <Label>Resume URL *</Label>
-//         <Input
-//           name="resume"
-//           placeholder="https://drive.google.com/... or https://yoursite.com/resume.pdf"
-//           defaultValue={saved.resume as string}
-//           required
-//         />
-//         <p className="mt-1.5 text-xs text-muted-foreground">
-//           Paste a link to your resume (Google Drive, Dropbox, personal site, etc.)
-//         </p>
-//       </div>
-//       <div>
-//         <Label>How did you hear about us? *</Label>
-//         <Select name="source" defaultValue={saved.source as string} required>
-//           <option value="">Select source</option>
-//           <option value="LinkedIn">LinkedIn</option>
-//           <option value="Google">Google Search</option>
-//           <option value="Friend / Referral">Friend / Referral</option>
-//           <option value="Social Media">Social Media</option>
-//           <option value="Job Board">Job Board</option>
-//           <option value="Other">Other</option>
-//         </Select>
-//       </div>
-//       <div>
-//         <Label>Anything else you'd like to share?</Label>
-//         <Textarea name="comments" placeholder="Tell us anything that might help us match you better..." defaultValue={saved.comments as string} />
-//       </div>
-//       <div className="space-y-3 rounded-xl border border-border bg-muted/30 p-4">
-//         <label className="flex cursor-pointer items-start gap-3">
-//           <input
-//             type="checkbox"
-//             name="agreeTerms"
-//             defaultChecked={saved.agreeTerms as boolean}
-//             required
-//             className="mt-0.5 h-4 w-4 rounded border-border"
-//           />
-//           <span className="text-sm text-foreground">
-//             I agree to the{" "}
-//             <a href="/terms" className="underline underline-offset-2 hover:text-muted-foreground">Terms of Service</a>{" "}
-//             and{" "}
-//             <a href="/privacy" className="underline underline-offset-2 hover:text-muted-foreground">Privacy Policy</a> *
-//           </span>
-//         </label>
-//         <label className="flex cursor-pointer items-start gap-3">
-//           <input
-//             type="checkbox"
-//             name="subscribeUpdates"
-//             defaultChecked={saved.subscribeUpdates as boolean}
-//             className="mt-0.5 h-4 w-4 rounded border-border"
-//           />
-//           <span className="text-sm text-muted-foreground">
-//             Send me job alerts and platform updates
-//           </span>
-//         </label>
-//       </div>
-//     </div>
-//   );
-// }
-
 const STEP_COMPONENTS = [
   StepPersonal,
   StepProfessional,

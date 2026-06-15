@@ -12,7 +12,8 @@ import {
 import { useAuth } from "@clerk/nextjs";
 import SelectField from "@/components/ui/selectField";
 import { Input } from "@/components/ui/Input";
-import { Field, PreferenceCard } from "@/components/PreferenceCard";
+import { Field, PreferenceCard } from "@/components/console/PreferenceCard";
+import { DEVELOPER_ROLES, EXPERIENCE_OPTIONS, QUALIFICATION_OPTIONS, VISA_OPTIONS } from "@/lib/types";
 
 interface PreferencesData {
   firstName: string;
@@ -48,42 +49,7 @@ interface PreferencesData {
   isActive: boolean;
 }
 
-const DEVELOPER_ROLES = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Full Stack Developer",
-  "Mobile Developer",
-  "DevOps Engineer",
-  "Data Engineer",
-  "Machine Learning Engineer",
-  "Other",
-];
 
-const EXPERIENCE_OPTIONS = [
-  "0-1 years",
-  "1-3 years",
-  "3-5 years",
-  "5-10 years",
-  "10+ years",
-];
-
-const QUALIFICATION_OPTIONS = [
-  "High School",
-  "Diploma",
-  "Bachelor's",
-  "Master's",
-  "PhD",
-  "Other",
-];
-
-const VISA_OPTIONS = [
-  "Citizen",
-  "Permanent Resident",
-  "Work Permit",
-  "Open Work Permit",
-  "Student Visa",
-  "Requires Sponsorship",
-];
 
 export default function PreferencesPage() {
   const [data, setData] = useState<PreferencesData | null>(null);
@@ -186,7 +152,7 @@ export default function PreferencesPage() {
         {/* HEADER */}
         <div className="mb-8 flex items-center justify-between border-border/50 pb-4">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight">
+            <h1 className="text-4xl font-semibold tracking-tight">
               Preferences
             </h1>
             <p className="mt-1 text-muted-foreground">

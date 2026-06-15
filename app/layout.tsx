@@ -1,5 +1,8 @@
+// /app/layout.tsx
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css"
+import { ThemeProvider } from "next-themes";
+import { ProfileProvider } from "@/context/ProfileContext";
 
 export default function RootLayout({
   children,
@@ -14,11 +17,23 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
-        <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-            <body className="font-sans bg-background text-foreground min-h-screen">
-                {children}
-            </body>
-        </ClerkProvider>
+        <body className="font-sans bg-background text-foreground min-h-screen">
+
+          <ClerkProvider>
+            <div suppressHydrationWarning>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+              >
+                <ProfileProvider>
+                  {children}
+                </ProfileProvider>
+              </ThemeProvider>
+            </div>
+          </ClerkProvider>
+
+        </body>
     </html>
   );
 }

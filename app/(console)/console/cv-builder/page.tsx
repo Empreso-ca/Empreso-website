@@ -170,7 +170,7 @@ export default function Page() {
 
           <Button
             onClick={generateResume}
-            disabled={loading}
+            disabled={loading || !company || !role || !jobDescription}
             className="w-full"
           >
             {loading ? "Generating..." : "Generate Resume"}
