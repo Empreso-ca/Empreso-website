@@ -13,7 +13,7 @@ const navItems = [
   { label: "Products", href: "/products" },
   { label: "Pricing", href: "/pricing" },
   { label: "Training", href: "/training" },
-  { label: "Jobs", href: "/jobs" },
+  // { label: "Jobs", href: "/jobs" },
   { label: "ATS-Checker", href: "/ats-check"},
   { label: "Contact", href: "/contact" },
 ];

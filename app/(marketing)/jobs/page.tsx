@@ -1,10 +1,10 @@
-import { Careers } from "@/components/landing/Careers";
-import { getJobs } from "@/lib/api-client";
+// import { Careers } from "@/components/landing/Careers";
+// import { getJobs } from "@/lib/api-client";
 
 export const dynamic = "force-dynamic";
 
 export default async function JobsPage () {
-    const jobs = await getJobs();
+    // const jobs = await getJobs();
 
     return (
         <main className="relative">
@@ -15,10 +15,10 @@ export default async function JobsPage () {
                     Find Your Next Chapter
                 </h1>
                 <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                    {jobs.length} transformative opportunities waiting
+                    {/* {jobs.length} transformative opportunities waiting */}
                 </p>
             </section>
-            <Careers jobs={jobs}/>
+            {/* <Careers jobs={jobs}/> */}
         </main>
     )
 }
