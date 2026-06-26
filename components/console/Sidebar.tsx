@@ -12,7 +12,9 @@ import {
   SlidersHorizontal,
   PanelLeftOpen,
   PanelRightClose,
-  GroupIcon
+  GroupIcon,
+  Workflow,
+  MousePointerClick 
 } from "lucide-react"
 
 interface SidebarProps {
@@ -31,12 +33,23 @@ export function Sidebar({
 
   const active = "bg-muted font-medium"
 
-  const topNavItems = [
-    { href: "/console", label: "Home", icon: Home },
-    { href: "/console/cv-builder", label: "CV Generator", icon: FileText },
-    { href: "/console/cv-builder/editor", label: "LaTeX CV Editor", icon: Code },
-    { href: "/console/jobs", label: "Personalised Jobs", icon: DockIcon },
-    { href: "/console/applications", label: "Your Applications", icon: List },
+  const navigationSections = [
+    {
+      title: "Dashboard",
+      items: [
+        { href: "/console", label: "Home", icon: Home },
+        { href: "/console/applications", label: "Your Applications", icon: List },
+      ],
+    },
+    {
+      title: "Tools",
+      items: [
+        { href: "/console/cv-builder", label: "CV Generator", icon: FileText },
+        { href: "/console/cv-builder/editor", label: "LaTeX CV Editor", icon: Code },
+        { href: "/console/jobs", label: "Personalised Jobs", icon: DockIcon },
+        { href: "/console/smart-apply", label: "Smart Apply", icon: MousePointerClick  },
+      ],
+    },
   ]
 
   const bottomNavItems = [
@@ -52,23 +65,35 @@ export function Sidebar({
         collapsed ? "w-20" : "w-64"
       }`}
     >
-      <nav className="space-y-1 flex-1">
-        {topNavItems.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href
+      <nav className="flex-1 space-y-6">
+        {navigationSections.map((section) => (
+          <div key={section.title}>
+            {!collapsed && (
+              <p className="mb-2 px-4 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {section.title}
+              </p>
+            )}
 
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`${base} ${isActive ? active : ""} ${
-                collapsed ? "justify-center px-2" : ""
-              }`}
-            >
-              <Icon size={18} />
-              {!collapsed && <span>{label}</span>}
-            </Link>
-          )
-        })}
+            <div className="space-y-1">
+              {section.items.map(({ href, label, icon: Icon }) => {
+                const isActive = pathname === href
+
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={`${base} ${isActive ? active : ""} ${
+                      collapsed ? "justify-center px-2" : ""
+                    }`}
+                  >
+                    <Icon size={18} />
+                    {!collapsed && <span>{label}</span>}
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       <div className="space-y-1">

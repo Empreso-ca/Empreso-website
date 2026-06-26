@@ -175,8 +175,14 @@ export interface UserPrefill {
 }
 
 
-export type ProfileCreate = Omit<Profile, "id" | "isActive" | "createdAt" | "updatedAt">;
-export type ProfileUpdate = Partial<ProfileCreate>;
+export interface ProfileCreate {
+  userId: string;
+  name: string;
+}
+
+export type ProfileUpdate = Partial<
+  Omit<Profile, "id" | "userId" | "isActive" | "createdAt" | "updatedAt">
+>;
 
 
 

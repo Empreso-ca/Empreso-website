@@ -53,7 +53,6 @@ export default function EditProfilePage() {
     getProfile(profileId)
       .then((data) => {
         if (mounted) setProfile(data);
-        console.log(data);
         
       })
       .catch((e: unknown) => {

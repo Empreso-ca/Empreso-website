@@ -377,11 +377,16 @@ export default function PreferencesPage() {
                     <a
                       href={data.resume}
                       target="_blank"
-                      className="px-3 py-1.5 text-sm border rounded-lg"
+                      rel="noreferrer"
+                      className="rounded-lg border px-3 py-2 text-sm"
                     >
                       View
                     </a>
-                    <button className="px-3 py-1.5 text-sm bg-primary text-white rounded-lg">
+
+                    <button
+                      type="button"
+                      className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground"
+                    >
                       Replace
                     </button>
                   </div>

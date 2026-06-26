@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css"
 import { ThemeProvider } from "next-themes";
 import { ProfileProvider } from "@/context/ProfileContext";
+import QueryProvider from "@/components/providers/query-provider";
 
 export default function RootLayout({
   children,
@@ -20,17 +21,27 @@ export default function RootLayout({
         <body className="font-sans bg-background text-foreground min-h-screen">
 
           <ClerkProvider>
-            <div suppressHydrationWarning>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-              >
-                <ProfileProvider>
-                  {children}
-                </ProfileProvider>
-              </ThemeProvider>
-            </div>
+
+            <QueryProvider>
+
+              <div suppressHydrationWarning>
+
+                {/* <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                > */}
+
+                  <ProfileProvider>
+                    {children}
+                  </ProfileProvider>
+
+                {/* </ThemeProvider> */}
+                
+              </div>
+
+            </QueryProvider>
+
           </ClerkProvider>
 
         </body>

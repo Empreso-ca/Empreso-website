@@ -78,9 +78,9 @@ export default function ProfileSwitcher({
           </> : <>
             <AlertCircle
               size={16}
-              className="text-red-700"
+              className="text-neutral-500"
             />
-            <span className="max-w-[140px] truncate text-sm text-red-700">
+            <span className="max-w-[140px] truncate text-sm text-neutral-500">
               No Active Profile
             </span>
           </>
@@ -168,7 +168,7 @@ export default function ProfileSwitcher({
 
           {/* Footer */}
           <div className="border-neutral-800 p-2">
-            <Link href={`/console/profiles/new?userId=${userId}`}>
+            <Link href={`/console/profiles?create=true`}>
               <Button variant="outline"
                 className="
                 w-full

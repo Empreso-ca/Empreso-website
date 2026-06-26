@@ -1,6 +1,7 @@
 'use server'
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { Profile, UserPrefill, ProfileCreate, ProfileUpdate } from "./types";
+import { RecommendedResponse } from "@/app/(console)/console/smart-apply/page";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,6 +12,23 @@ function authHeaders(token: string | null) {
     Authorization: `Bearer ${token}`,
   };
 }
+
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // console.log(`Requesting api ${path}`);
+  
+  const res = await fetch(`${API_URL}${path}`, {
+    headers: { "Content-Type": "application/json", ...init?.headers },
+    ...init,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? "Request failed");
+  }
+  if (res.status === 204) return undefined as T;
+  return res.json();
+}
+
 
 
 // ------------------------------
@@ -326,21 +344,6 @@ export async function compileLaTeX(
 //  PROFILEs APIS
 // ----------------------------
  
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  // console.log(`Requesting api ${path}`);
-  
-  const res = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json", ...init?.headers },
-    ...init,
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(err.detail ?? "Request failed");
-  }
-  if (res.status === 204) return undefined as T;
-  return res.json();
-}
-
 
 export async function loadProfiles(userId: string) {
   const res = await request<Profile[]>(`/profiles${userId ? `?userId=${userId}` : ""}`);
@@ -357,6 +360,30 @@ export const createProfile = async (data: ProfileCreate) => {
   const res = request<Profile>("/profiles", { method: "POST", body: JSON.stringify(data) })
   return res;
 }
+
+
+export const uploadProfileResume = async (
+  profile_id: number | undefined,
+  formData: FormData,
+  token: string
+): Promise<{ resumeUrl: string }> => {
+  const res = await fetch(`${API_URL}/profiles/${profile_id}/resume`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({
+      detail: res.statusText,
+    }));
+    throw new Error(err.detail ?? "Failed to upload resume");
+  }
+
+  return res.json();
+};
 
 export const updateProfile = async (id: number, data: ProfileUpdate) => {
   const res = await request<Profile>(`/profiles/${id}`, {
@@ -379,5 +406,12 @@ export const activateProfile = async (id: number) => {
 
 export const getProfile = async (id: number) => {
   const res = await request<Profile>(`/profiles/${id}`)
+  return res;
+}
+
+
+
+export const getSmartRecommendedJobs = async (id: string) => {
+  const res = await request<RecommendedResponse>(`/jobs/recommended?user_id=${id}`, { method: "GET" })
   return res;
 }

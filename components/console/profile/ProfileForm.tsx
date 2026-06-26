@@ -10,6 +10,9 @@ import { Briefcase, DollarSign, FileText, GraduationCap, InfoIcon, LinkIcon, Map
 import SelectField from "@/components/ui/selectField";
 import { QUALIFICATION_OPTIONS,  } from "@/lib/types";
 import { Textarea } from "@/components/ui/Textarea";
+import { useRef } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { uploadProfileResume } from "@/lib/api-client";
 
 
 // ─── Types ──────────────────────────────────────────────────
@@ -166,12 +169,14 @@ export default function ProfileForm({
   const [values, setValues] = useState<FormValues>(() =>
     toValues(undefined, user)
   );
-
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingResume, setUploadingResume] = useState(false);
   useEffect(() => {
     return setValues(toValues(initial, user));
   }, [initial, user]);
   
   const [errors, setErrors] = useState<FieldErrors>({});
+  const { getToken } = useAuth();
 
   function set<K extends keyof FormValues>(key: K, val: FormValues[K]) {
     setValues((v) => ({ ...v, [key]: val }));
@@ -184,6 +189,29 @@ export default function ProfileForm({
     if (!values.agreeTerms) errs.agreeTerms = "You must agree to the terms";
     setErrors(errs);
     return Object.keys(errs).length === 0;
+  }
+
+  async function handleResumeUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const token = await getToken({ template: "fastapi" });
+    const file = e.target.files?.[0];
+    if (!token || !file) return;
+
+    try {
+      setUploadingResume(true);
+
+      const formData = new FormData();
+      formData.append("resume", file);
+
+      const res = await uploadProfileResume(initial?.id, formData, token);
+
+      set("resume", res.resumeUrl);
+      
+    } finally {
+      setUploadingResume(false);
+      e.target.value = "";
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -332,31 +360,54 @@ export default function ProfileForm({
               icon={<FileText size={18} />}
             >
               <div className="rounded-xl border p-4 flex items-center justify-between">
+
                 <div>
-                  <p className="font-medium">Resume Uploaded</p>
+                  <p className="font-medium">
+                    {values.resume ? "Resume Uploaded" : "No Resume Uploaded"}
+                  </p>
+
                   <p className="text-sm text-muted-foreground">
-                    View or replace your latest resume
+                    {values.resume
+                      ? "View or replace your latest resume"
+                      : "Upload your resume in PDF format"}
                   </p>
                 </div>
 
                 <div className="flex gap-2">
-                  <a
-                    href={values.resume}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-lg border px-3 py-2 text-sm"
-                  >
-                    View
-                  </a>
+                  {values.resume && (
+                    <a
+                      href={values.resume}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-lg border px-3 py-2 text-sm"
+                    >
+                      View
+                    </a>
+                  )}
 
                   <button
                     type="button"
+                    disabled={uploadingResume}
+                    onClick={() => fileInputRef.current?.click()}
                     className="rounded-lg bg-primary px-3 py-2 text-sm text-primary-foreground"
                   >
-                    Replace
+                    {uploadingResume
+                      ? "Uploading..."
+                      : values.resume
+                      ? "Replace"
+                      : "Upload Resume"}
                   </button>
                 </div>
+
               </div>
+
+              <input
+                hidden
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleResumeUpload}
+              />
             </PreferenceCard>
 
             {/* LINKS */}
