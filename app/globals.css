@@ -23,6 +23,8 @@
     --gradient-pink: 330 80% 65%;
     --gradient-purple: 270 70% 60%;
     --gradient-orange: 20 90% 60%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
   }
 }
 

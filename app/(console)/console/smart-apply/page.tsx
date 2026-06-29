@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
+
 import {
   Table,
   THead,
@@ -9,100 +11,70 @@ import {
   TR,
   TD,
   EmptyState,
+  Badge,
 } from "@/components/ui/primitives";
-import { Badge } from "@/components/ui/Badge";
-import { getSmartRecommendedJobs } from "@/lib/api-client";
+
+import { fmtDate } from "@/lib/utils";
+import { Job } from "@/lib/types";
+import { loadSmartApplyJobs } from "@/lib/api-client";
 import { useProfile } from "@/context/ProfileContext";
 
-type RecommendedJob = {
-  id: string;
-  title: string;
-  company: string | null;
-  location: string | null;
-  remote: boolean;
-  job_type: string | null;
-  salary: string | null;
-  posted_at: string;
-  application_url: string;
-  score: number;
-  matched_skills: string[];
-};
-
-export type RecommendedResponse = {
-  count: number;
-  jobs: RecommendedJob[];
-};
-
-export default function RecommendedJobsPage() {
-  const { user, isLoaded } = useUser();
-  const { activeProfile } = useProfile();
-  const [jobs, setJobs] = useState<RecommendedJob[]>([]);
+export default function Page() {
+  const { userId, isLoaded } = useAuth();
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const fetchRecommendedJobs = async () => {
-    if (!user?.id) return;
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const data: RecommendedResponse = await getSmartRecommendedJobs(user.id);
-
-      setJobs(data.jobs || []);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load recommended jobs.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {activeProfile} = useProfile();
 
   useEffect(() => {
-    if (isLoaded && user?.id) {
-      fetchRecommendedJobs();
+    if (!isLoaded || !userId) return;
+
+    async function loadJobs() {
+      try {
+        setLoading(true);
+        const data = await loadSmartApplyJobs(userId as string);
+        const rows: Job[] = data.jobs ?? data;
+        setJobs(rows);
+        setTotal(data.total ?? rows.length);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [isLoaded, user?.id, activeProfile]);
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString();
-  };
+    loadJobs();
+  }, [userId, isLoaded, activeProfile]);
 
-  const scoreVariant = (score: number) => {
-    if (score >= 80) return "default";
-    if (score >= 60) return "secondary";
-    return "outline";
-  };
-
-  if (!isLoaded || loading) {
+  if (loading) {
     return (
-      <div className="flex justify-center py-10">
-        <p className="text-sm text-muted-foreground">
-          Loading recommendations...
-        </p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="py-10 text-center">
-        <p className="text-red-500">{error}</p>
+      <div className="space-y-4 animate-pulse">
+        <div className="h-10 w-72 rounded bg-muted" />
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="h-16 rounded-lg border bg-muted/30"
+          />
+        ))}
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <header>
-        <h1 className="text-2xl font-bold">Recommended Jobs</h1>
-        <p className="text-sm text-muted-foreground">
-          {jobs.length} jobs matched to your profile
-        </p>
+    <>
+      <header className="flex flex-wrap items-end justify-between gap-3 m-5">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight">
+            Smart Apply Jobs
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {total.toLocaleString()} total
+          </p>
+        </div>
       </header>
 
       {jobs.length === 0 ? (
-        <EmptyState title="No recommendations found" />
+        <EmptyState title="No jobs" />
       ) : (
         <Table>
           <THead>
@@ -111,11 +83,9 @@ export default function RecommendedJobsPage() {
               <TH>Company</TH>
               <TH>Location</TH>
               <TH>Type</TH>
-              <TH>Match</TH>
-              <TH>Skills</TH>
-              <TH>Salary</TH>
+              <TH>Source</TH>
               <TH>Posted</TH>
-              <TH></TH>
+              {/* <TH></TH> */}
             </TR>
           </THead>
 
@@ -125,58 +95,39 @@ export default function RecommendedJobsPage() {
                 <TD className="font-medium">{job.title}</TD>
 
                 <TD className="text-muted-foreground">
-                  {job.company ?? "—"}
+                  {job.company?.name ?? "—"}
                 </TD>
 
                 <TD className="text-muted-foreground">
                   {job.location ?? (job.remote ? "Remote" : "—")}
                 </TD>
 
-                <TD>{job.job_type ?? "—"}</TD>
-
                 <TD>
-                  <Badge variant={scoreVariant(job.score)}>
-                    {Math.round(job.score)}%
-                  </Badge>
+                  {job.job_type ? <Badge>{job.job_type}</Badge> : "—"}
                 </TD>
 
-                <TD>
-                  <div className="flex flex-wrap gap-1">
-                    {job.matched_skills?.slice(0, 3).map((skill) => (
-                      <Badge key={skill} variant="secondary">
-                        {skill}
-                      </Badge>
-                    ))}
-
-                    {job.matched_skills?.length > 3 && (
-                      <Badge variant="outline">
-                        +{job.matched_skills.length - 3}
-                      </Badge>
-                    )}
-                  </div>
+                <TD className="text-xs text-muted-foreground">
+                  {job.source ?? "—"}
                 </TD>
-
-                <TD>{job.salary ?? "—"}</TD>
 
                 <TD className="text-muted-foreground">
-                  {formatDate(job.posted_at)}
+                  {fmtDate(job.posted_at)}
                 </TD>
 
-                <TD className="text-right">
-                  <a
-                    href={job.application_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-medium hover:underline"
+                {/* <TD className="text-right">
+                  <Link
+                    href={`/admin/jobs/${job.id}`}
+                    className="text-xs hover:underline"
                   >
-                    Apply
-                  </a>
-                </TD>
+                    View
+                  </Link>
+                </TD> */}
               </TR>
             ))}
           </tbody>
         </Table>
       )}
-    </div>
+    </>
   );
 }
+// 6304132234

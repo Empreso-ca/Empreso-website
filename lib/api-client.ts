@@ -1,7 +1,6 @@
 'use server'
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { Profile, UserPrefill, ProfileCreate, ProfileUpdate } from "./types";
-import { RecommendedResponse } from "@/app/(console)/console/smart-apply/page";
+import { Profile, UserPrefill, ProfileCreate, ProfileUpdate, Job, JobFilterOptions, JobFilterParams, JobListResponse } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -337,6 +336,43 @@ export async function compileLaTeX(
 }
 
 
+export async function loadSmartApplyJobs(userId: string) {
+  const res = await request<any>(`/jobs/smart-apply?userId=${userId}`, { cache: "no-store" })
+  return res;
+}
+
+
+
+export async function getJobFilterOptions(): Promise<JobFilterOptions> {
+  const res = await request<JobFilterOptions>(`/jobs/filters`, { next: { revalidate: 300 } });
+  return res;
+}
+
+export async function getFilteredJobs(filters: JobFilterParams): Promise<JobListResponse> {
+  const params = new URLSearchParams();
+
+  if (filters.location) params.set("location", filters.location);
+  if (filters.department) params.set("department", filters.department);
+  if (filters.team) params.set("team", filters.team);
+  if (filters.job_type) params.set("job_type", filters.job_type);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.company) params.set("company", filters.company);
+  if (filters.remote) params.set("remote", filters.remote);
+  params.set("page", filters.page ?? "1");
+  params.set("page_size", "20");
+
+  const res = await fetch(`${API_URL}/jobs?${params.toString()}`, {
+    // Job listings change often; don't cache stale filtered views.
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to load jobs: ${res.status}`);
+  }
+
+  return res.json();
+}
+
 
 
 
@@ -406,12 +442,5 @@ export const activateProfile = async (id: number) => {
 
 export const getProfile = async (id: number) => {
   const res = await request<Profile>(`/profiles/${id}`)
-  return res;
-}
-
-
-
-export const getSmartRecommendedJobs = async (id: string) => {
-  const res = await request<RecommendedResponse>(`/jobs/recommended?user_id=${id}`, { method: "GET" })
   return res;
 }

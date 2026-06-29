@@ -36,59 +36,56 @@ export enum PlanType {
 export interface User {
     id: number;
     userId: string;
-
     firstName: string;
     lastName: string;
-
     email: string;
     phone: string;
-
     linkedin?: string | null;
     city: string;
     country: string;
-
     qualification: string;
     graduationYear: number;
     fieldOfStudy: string;
-
     experience: string;
     currentJobRole?: string | null;
     currentEmployer?: string | null;
-
     preferredDeveloperRole?: string | null;
     course?: string | null;
-
     resume: string;
-
     preferredJobLocation: string;
     visaStatus: string;
-
     source: string;
     comments?: string | null;
-
     agreeTerms: boolean;
     subscribeUpdates: boolean;
-
     applications?: Application[];
-
     subscription?: Subscription | null;
 }
 
 
 export interface Job {
+  id: number;
+  title: string;
+  description: string | null;
+  location: string | null;
+  department: string | null;
+  team: string | null;
+  job_type: string | null;
+  remote: boolean;
+  application_url: string | null;
+  salary_range: string |null;
+  source: string | null;
+  source_job_id: string | null;
+  posted_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  company: {
     id: number;
-    title: string;
-    description: string;
-    location?: string | null;
-    jobType: JobType;
-    salaryRange?: string | null;
-    postedAt: string;
-    expiryDate?: Date | null;
-    status: JobStatus;
-    companyLogo: string;
-    companyName: string;
-    applications?: Application[];
-}
+    name: string;
+    logo_url: string | null;
+    website: string | null;
+  } | null;
+};
 
 export interface Application {
     id: number;
@@ -185,6 +182,38 @@ export type ProfileUpdate = Partial<
 >;
 
 
+export interface FilterOption {
+  value: string;
+  label: string;
+}
+export interface JobFilterOptions {
+  locations: FilterOption[];
+  departments: FilterOption[];
+  teams: FilterOption[];
+  job_types: FilterOption[];
+  statuses: FilterOption[];
+  companies: FilterOption[];
+  remote_options: FilterOption[];
+}
+
+export interface JobListResponse {
+  items: Job[];
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+}
+
+export interface JobFilterParams {
+  location?: string;
+  department?: string;
+  team?: string;
+  job_type?: string;
+  status?: string;
+  company?: string;
+  remote?: string;
+  page?: string;
+}
 
 
 

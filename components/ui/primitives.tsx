@@ -48,7 +48,7 @@ export function Input({ className, ...p }: ComponentProps<"input">) {
 
 export function Table({ className, ...p }: ComponentProps<"table">) {
   return (
-    <div className="overflow-x-auto rounded-lg border bg-card">
+    <div className="overflow-x-auto rounded-md border bg-card">
       <table className={cn("w-full text-sm", className)} {...p} />
     </div>
   );
