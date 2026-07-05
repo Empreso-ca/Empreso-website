@@ -15,8 +15,7 @@ export const Hero = () => {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pb-16 sm:pb-20 pt-4">
         
         <div className="mb-10 sm:mb-12 flex justify-center">
-          <a
-            href="https://ai.empreso.ca" target="blank"
+          <Link href="/ai" target="blank"
             className="inline-flex items-center gap-2 rounded-pill border border-white/[0.1] bg-card/40 px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs text-foreground/80 backdrop-blur transition-colors hover:border-border text-center"
           >
             <Terminal className="h-3 w-3" />
@@ -24,7 +23,7 @@ export const Hero = () => {
             <span className="text-foreground underline decoration-dotted underline-offset-4">
               Chat with our <span className="font-mono">AI.</span>
             </span>
-          </a>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12 items-center">

@@ -30,7 +30,7 @@ const FloatingButton = () => {
 
         {/* Button */}
         <button
-          onClick={() => window.open("https://ai.empreso.ca", "_blank")}
+          onClick={() => window.open("/ai", "_blank")}
           className="relative flex items-center justify-center w-14 h-14 rounded-full border border-white/[0.1] bg-background/80 backdrop-blur-md shadow-xl transition-all duration-300 group-hover:scale-105"
         >
           {/* subtle inner background */}

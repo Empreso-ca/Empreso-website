@@ -1,8 +1,9 @@
+import SettingsPage from "./SettingsPage"
 
 
 function page() {
   return (
-    <div>Settings page</div>
+    <SettingsPage />
   )
 }
 
