@@ -8,7 +8,7 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_ASSISTANT_API_URL || "http://localhost:8000";
+  process.env.NEXT_PUBLIC_API_URL;
 
 type Stage =
   | "understanding"
