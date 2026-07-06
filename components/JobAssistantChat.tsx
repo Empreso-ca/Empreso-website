@@ -1,17 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EmpressoLogo } from "./EmpressoLogo";
-import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 
-import "highlight.js/styles/github-dark.css";
+const API_BASE =
+  process.env.NEXT_PUBLIC_ASSISTANT_API_URL || "http://localhost:8000";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
-type Stage = "understanding" | "search_jobs" | "get_company_info" | "career_advice" | "answer_faq" | "ranking" | null;
+type Stage =
+  | "understanding"
+  | "search_jobs"
+  | "get_company_info"
+  | "career_advice"
+  | "answer_faq"
+  | "ranking"
+  | null;
 
 interface JobCard {
   job_id: string;
@@ -32,11 +38,14 @@ interface ChatMessage {
   isStreaming?: boolean;
 }
 
-const PIPELINE_STAGES: { key: Exclude<Stage, null>; label: string }[] = [
-  { key: "understanding", label: "Understanding" },
-  { key: "search_jobs", label: "Searching" },
-  { key: "ranking", label: "Ranking" },
-];
+const STAGE_LABELS: Record<Exclude<Stage, null>, string> = {
+  understanding: "Understanding your request",
+  search_jobs: "Searching jobs",
+  get_company_info: "Looking up company info",
+  career_advice: "Gathering market context",
+  answer_faq: "Checking help articles",
+  ranking: "Ranking results",
+};
 
 function humanizeJobType(jobType: string | null): string | null {
   if (!jobType) return null;
@@ -45,6 +54,16 @@ function humanizeJobType(jobType: string | null): string | null {
     .split("_")
     .map((w) => w[0]?.toUpperCase() + w.slice(1))
     .join(" ");
+}
+
+function StatusChip({ stage }: { stage: Stage }) {
+  if (!stage) return null;
+  return (
+    <div className="status-chip">
+      <span className="status-chip__dot" />
+      <span>{STAGE_LABELS[stage]}</span>
+    </div>
+  );
 }
 
 function JobResultCard({ job }: { job: JobCard }) {
@@ -64,9 +83,7 @@ function JobResultCard({ job }: { job: JobCard }) {
       <div className="job-card__tags">
         {job.location && <span className="tag">{job.location}</span>}
         {job.remote != null && (
-          <span className="tag tag--accent">
-            {job.remote ? "Remote" : "On-site"}
-          </span>
+          <span className="tag">{job.remote ? "Remote" : "On-site"}</span>
         )}
         {job.job_type && <span className="tag">{humanizeJobType(job.job_type)}</span>}
       </div>
@@ -78,7 +95,7 @@ function JobResultCard({ job }: { job: JobCard }) {
           className="job-card__apply"
         >
           Apply
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
             <path
               d="M7 17L17 7M17 7H8M17 7V16"
               stroke="currentColor"
@@ -97,43 +114,15 @@ function JobResultCard({ job }: { job: JobCard }) {
   );
 }
 
-function PipelineTracker({ activeStage }: { activeStage: Stage }) {
-  const activeIndex = PIPELINE_STAGES.findIndex((s) => s.key === activeStage);
-  const isSearchVariant = activeStage && !["understanding", "ranking", null].includes(activeStage);
-
+function AssistantAvatar() {
   return (
-    <div className="pipeline" aria-live="polite">
-      {PIPELINE_STAGES.map((stage, i) => {
-        const isDone = activeIndex > i || activeIndex === -1;
-        const isActive =
-          i === 1
-            ? isSearchVariant || activeStage === "search_jobs"
-            : activeStage === stage.key;
-        const isPast = activeIndex > i && activeIndex !== -1;
-        return (
-          <div className="pipeline__step" key={stage.key}>
-            <div
-              className={`pipeline__node ${isActive ? "pipeline__node--active" : ""} ${
-                isPast ? "pipeline__node--done" : ""
-              }`}
-            />
-            <span
-              className={`pipeline__label ${
-                isActive ? "pipeline__label--active" : ""
-              }`}
-            >
-              {stage.label}
-            </span>
-            {i < PIPELINE_STAGES.length - 1 && (
-              <div
-                className={`pipeline__connector ${
-                  isPast ? "pipeline__connector--done" : ""
-                }`}
-              />
-            )}
-          </div>
-        );
-      })}
+    <div className="avatar avatar--assistant">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"
+          fill="currentColor"
+        />
+      </svg>
     </div>
   );
 }
@@ -141,10 +130,11 @@ function PipelineTracker({ activeStage }: { activeStage: Stage }) {
 export default function JobAssistantChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionId] = useState<string>(() => crypto.randomUUID());
   const [activeStage, setActiveStage] = useState<Stage>(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -188,9 +178,6 @@ export default function JobAssistantChat() {
           signal: controller.signal,
         });
 
-        const returnedSession = res.headers.get("X-Session-Id");
-        if (returnedSession) setSessionId(returnedSession);
-
         if (!res.body) throw new Error("No response body");
 
         const reader = res.body.getReader();
@@ -221,6 +208,7 @@ export default function JobAssistantChat() {
             if (event.type === "progress") {
               setActiveStage(event.stage);
             } else if (event.type === "token") {
+              setActiveStage(null);
               setMessages((prev) =>
                 prev.map((m) =>
                   m.id === assistantId ? { ...m, text: m.text + event.content } : m
@@ -277,157 +265,132 @@ export default function JobAssistantChat() {
     sendMessage(input);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
+  };
+
+  const autoGrow = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
+  };
+
   return (
-<div className="flex h-screen flex-col bg-background">
-  {/* Header */}
-  <header className="shrink-0 px-6">
-    <div className="mx-auto flex w-full max-w-5xl items-center">
-      <div className="flex items-center gap-2">
-        <Link href="/">
-          <EmpressoLogo className="h-24 w-auto text-foreground" />
-        </Link>
-
-        <span className="text-muted-foreground/30">/</span>
-
-        <span className="text-md font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-          AI
-        </span>
-      </div>
-    </div>
-  </header>
-
-  {/* Chat */}
-  <div ref={scrollRef} className="flex-1 overflow-y-auto">
-    <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col px-6">
-
-      {messages.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center pb-32 text-center">
-
-          <h1 className="text-5xl font-semibold tracking-tight">
-            What are you looking for?
-          </h1>
-
-          <p className="mt-4 max-w-xl text-muted-foreground">
-            Search jobs, ask about companies, prepare for interviews, or get
-            career advice.
-          </p>
-
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            {[
-              "Remote backend engineer jobs",
-              "What's Stripe hiring for right now?",
-              "How do I negotiate a job offer?",
-            ].map((s) => (
-              <button
-                key={s}
-                onClick={() => sendMessage(s)}
-                className="rounded-full border border-border bg-card px-5 py-3 text-sm transition-all hover:border-white/20 hover:bg-accent hover:scale-[1.02]"
-              >
-                {s}
-              </button>
-            ))}
+    <div className="assistant-shell">
+      <header className="assistant-header">
+          <div className="mx-auto flex w-full">
+            <div className="flex items-center gap-2">
+              <Link href="/">
+                <EmpressoLogo className="h-20 pb-1 w-auto text-foreground" />
+              </Link>
+              <span className="text-muted-foreground/30">/</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+                AI
+              </span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="space-y-6 pb-10">
+      </header>
+
+      <div className="assistant-body" ref={scrollRef}>
+        <div className="thread">
+          {messages.length === 0 && (
+            <div className="empty-state">
+              <p className="empty-state__title tracking-tighter">What are you looking for?</p>
+              <div className="empty-state__suggestions">
+                {[
+                  "Remote backend engineer jobs",
+                  "What's Stripe hiring for right now?",
+                  "How do I negotiate a job offer?",
+                ].map((s) => (
+                  <button
+                    key={s}
+                    className="suggestion-chip"
+                    onClick={() => sendMessage(s)}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${
-                msg.role === "user"
-                  ? "justify-end"
-                  : "justify-start"
-              } animate-fade`}
-            >
-              <div
-                className={`max-w-[80%] rounded-3xl px-5 py-4 ${
-                  msg.role === "user"
-                    ? "bg-white text-black"
-                    : "bg-card border border-border"
-                }`}
-              >
-                {msg.text && (
-                  <div className="proseprose-invertmax-w-noneprose-headings:font-semiboldprose-headings:tracking-tightprose-p:text-foregroundprose-p:leading-7prose-strong:text-whiteprose-li:marker:text-muted-foregroundprose-blockquote:border-l-borderprose-code:text-fuchsia-300prose-code:before:hiddenprose-code:after:hiddenprose-pre:borderprose-pre:border-borderprose-pre:bg-black/40">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[rehypeHighlight]}
-                    >
-                      {msg.text}
-                    </ReactMarkdown>
-                  </div>
-                )}
+            <div key={msg.id} className={`message message--${msg.role}`}>
+              {msg.role === "assistant" && <AssistantAvatar />}
 
-                {msg.isStreaming && (
-                  <div className="mt-4 space-y-3">
-                    <div className="shimmer h-3 w-full rounded-full" />
-                    <div className="shimmer h-3 w-4/5 rounded-full" />
-                    <div className="shimmer h-3 w-3/5 rounded-full" />
-                  </div>
-                )}
-
-                {msg.isStreaming &&
-                  msg.text && (
-                    <span className="ml-1 inline-block h-4 w-[2px] animate-pulse bg-current" />
-                  )}
-
-                {msg.jobs && msg.jobs?.length > 0 && (
-                  <div className="mt-6 grid gap-4 md:grid-cols-2">
-                    {msg.jobs.map((job) => (
-                      <JobResultCard
-                        key={job.job_id}
-                        job={job}
-                      />
-                    ))}
-                  </div>
+              <div className="message__content">
+                {msg.role === "user" ? (
+                  <div className="message__bubble">{msg.text}</div>
+                ) : (
+                  <>
+                    {msg.isStreaming && !msg.text && (
+                      <StatusChip stage={activeStage} />
+                    )}
+                    {msg.text && (
+                      <div className="message__text">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeHighlight]}
+                        >
+                          {msg.text}
+                        </ReactMarkdown>
+                        {msg.isStreaming && (
+                          <span className="cursor-blink" aria-hidden="true" />
+                        )}
+                      </div>
+                    )}
+                    {msg.jobs && msg.jobs.length > 0 && (
+                      <div className="job-grid">
+                        {msg.jobs.map((job) => (
+                          <JobResultCard key={job.job_id} job={job} />
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
           ))}
         </div>
-      )}
-    </div>
-  </div>
-
-  {/* Composer */}
-  <div className="shrink-0 px-6 pb-6">
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto max-w-4xl"
-    >
-      <div className="flex items-center gap-3 rounded-[28px] border border-border bg-card px-4 py-3 shadow-xl">
-
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          disabled={isStreaming}
-          placeholder="Ask about jobs, companies, or your career..."
-          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-        />
-
-        <button
-          type="submit"
-          disabled={isStreaming || !input.trim()}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black transition hover:scale-105 disabled:opacity-40"
-        >
-          <svg 
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M5 12H19M19 12L13 6M19 12L13 18"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-
       </div>
-    </form>
-  </div>
-</div>
-);
+
+      <div className="composer-area">
+        <form className="composer" onSubmit={handleSubmit}>
+          <textarea
+            ref={textareaRef}
+            className="composer__input"
+            value={input}
+            onChange={autoGrow}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask about jobs, companies, or your career..."
+            disabled={isStreaming}
+            rows={1}
+          />
+          <button
+            type="submit"
+            className="composer__send"
+            disabled={isStreaming || !input.trim()}
+            aria-label="Send message"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 19V5M12 5L5 12M12 5L19 12"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
+        <p className="composer__hint">
+          Empreso AI can make mistakes. Verify important details before applying.
+        </p>
+      </div>
+    </div>
+  );
 }
