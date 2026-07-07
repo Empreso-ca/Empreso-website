@@ -1,4 +1,4 @@
-import JobAssistantChat from "@/components/JobAssistantChat";
+import JobAssistantChat from "@/components/ai/JobAssistantChat";
 
 export const metadata = {
   title: "Empreso AI",

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { EmpressoLogo } from "./EmpressoLogo";
+import { EmpressoLogo } from "../EmpressoLogo";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -281,20 +281,21 @@ export default function JobAssistantChat() {
 
   return (
     <div className="assistant-shell">
-      <header className="assistant-header">
-          <div className="mx-auto flex w-full">
-            <div className="flex items-center gap-2">
-              <Link href="/">
-                <EmpressoLogo className="h-20 pb-1 w-auto text-foreground" />
-              </Link>
-              <span className="text-muted-foreground/30">/</span>
-              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-                AI
-              </span>
-            </div>
+      <header className="bg-background">
+        <div className="mx-auto flex h-16 items-center justify-between px-6">
+          <div className="flex items-center gap-3">
+            <Link href="/">
+              <EmpressoLogo className="h-24 w-auto pb-1 text-foreground" />
+            </Link>
+            <span className="text-muted-foreground/50 text-lg font-light">
+              /
+            </span>
+            <span className="text-sm font-medium tracking-[0.3em] pt-1 text-muted-foreground uppercase">
+              AI
+            </span>
           </div>
+        </div>
       </header>
-
       <div className="assistant-body" ref={scrollRef}>
         <div className="thread">
           {messages.length === 0 && (
