@@ -18,6 +18,7 @@ import { fmtDate } from "@/lib/utils";
 import { Job } from "@/lib/types";
 import { loadSmartApplyJobs } from "@/lib/api-client";
 import { useProfile } from "@/context/ProfileContext";
+import { EmpressoLogo } from "@/components/EmpressoLogo";
 
 export default function Page() {
   const { userId, isLoaded } = useAuth();
@@ -48,14 +49,48 @@ export default function Page() {
 
   if (loading) {
     return (
-      <div className="space-y-4 animate-pulse">
-        <div className="h-10 w-72 rounded bg-muted" />
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="h-16 rounded-lg border bg-muted/30"
-          />
-        ))}
+      <div className="space-y-8 py-12">
+        {/* AI Loading State */}
+        <div className="flex flex-col items-center justify-center text-center">
+          <div className="mx-auto flex h-16 items-center justify-between px-6">
+            <div className="flex items-center gap-3">
+              <Link href="/">
+                <EmpressoLogo className="h-24 w-auto pb-1 text-foreground" />
+              </Link>
+              <span className="text-muted-foreground/50 text-lg font-light">
+                /
+              </span>
+              <span className="text-sm font-medium tracking-[0.3em] pt text-muted-foreground uppercase">
+                AI
+              </span>
+            </div>
+        </div>
+
+          <h3 className="mt-6 text-lg font-semibold">
+            Optimizing Jobs openings for you
+          </h3>
+
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            Matching opportunities based on your profile and preferences...
+          </p>
+
+          {/* Shimmer Loader */}
+          <div className="mt-6 h-1.5 w-72 overflow-hidden rounded-full bg-muted">
+            <div className="relative h-full w-full overflow-hidden">
+              <div className="absolute inset-y-0 w-1/3 -translate-x-full bg-gradient-to-r from-transparent via-primary/70 to-transparent animate-shimmer" />
+            </div>
+          </div>
+        </div>
+
+        {/* Job Card Skeletons */}
+        <div className="space-y-4">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="h-16 animate-pulse rounded-lg border bg-muted/30"
+            />
+          ))}
+        </div>
       </div>
     );
   }

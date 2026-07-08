@@ -24,9 +24,20 @@ const config: Config = {
       },
       borderRadius: { lg: "12px", md: "8px", sm: "6px", pill: "9999px" },
       keyframes: {
+        shimmer: {
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(400%)',
+          },
+        },
         "fade-in": { from: { opacity: "0", transform: "translateY(8px)" }, to: { opacity: "1", transform: "translateY(0)" } },
       },
-      animation: { "fade-in": "fade-in 0.5s ease-out both" },
+      animation: { 
+        "fade-in": "fade-in 0.5s ease-out both",
+        shimmer: 'shimmer 1.5s ease-in-out infinite',
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

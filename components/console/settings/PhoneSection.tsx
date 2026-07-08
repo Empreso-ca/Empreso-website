@@ -65,7 +65,7 @@ export default function PhoneSection({ initialPhone, initialVerified }: Props) {
   }
 
   return (
-    <div>
+    <div className="mx-auto max-w-4xl">
       <p className="mb-2 text-sm text-zinc-400">Phone Number</p>
 
       <div className="rounded-xl border border-zinc-800 bg-[#111111] p-4">

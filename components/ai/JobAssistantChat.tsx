@@ -290,7 +290,7 @@ export default function JobAssistantChat() {
             <span className="text-muted-foreground/50 text-lg font-light">
               /
             </span>
-            <span className="text-sm font-medium tracking-[0.3em] pt-1 text-muted-foreground uppercase">
+            <span className="text-sm font-medium tracking-[0.3em] pt text-muted-foreground uppercase">
               AI
             </span>
           </div>
