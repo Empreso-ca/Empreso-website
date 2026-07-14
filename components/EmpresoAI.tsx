@@ -424,7 +424,7 @@ const AIResumeOptimizer: React.FC = () => {
           
           {/* Empreso AI Button */}
           <a
-            href="https://ai.empreso.ca"
+            href="https://ai.empreso.in"
             target="_blank"
             rel="noopener noreferrer"
             className="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl p-[1.5px] transition-all duration-300 hover:scale-[1.03]"

@@ -15,7 +15,7 @@ export const Hero = () => {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pb-16 sm:pb-20 pt-4">
         
         <div className="mb-10 sm:mb-12 flex justify-center">
-          <Link href="/ai" target="blank"
+          <Link href="https://ai.empreso.in" target="blank"
             className="inline-flex items-center gap-2 rounded-pill border border-white/[0.1] bg-card/40 px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs text-foreground/80 backdrop-blur transition-colors hover:border-border text-center"
           >
             <Terminal className="h-3 w-3" />
