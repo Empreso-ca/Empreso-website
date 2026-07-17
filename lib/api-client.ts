@@ -267,34 +267,6 @@ async function compilePDFToBase64(
   }
 }
 
-export async function generateResumePDFUrl(
-  session_id: string,
-  token: string | null
-): Promise<string | undefined> {
-  try {
-
-    const response = await fetch(
-      `${API_URL}/generate/stream`,
-      {
-        method: "POST",
-        headers: authHeaders(token),
-        body: JSON.stringify({ session_id }),
-      }
-    );
-
-    const reader = response.body?.getReader();
-    if (!reader) {
-      throw new Error("Response body is empty");
-    }
-
-    return compilePDFToBase64(reader);
-
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
 
 export async function compileLaTeX(
   latex: string, 
@@ -302,7 +274,7 @@ export async function compileLaTeX(
 ): Promise<Blob> {
 
   const response = await fetch(
-    `${API_URL}/generate/compile`,
+    `${API_URL}/cvpipeline/generate/compile`,
     {
       method: "POST",
       headers: authHeaders(token),

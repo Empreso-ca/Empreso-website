@@ -47,25 +47,5 @@ export async function uploadResumeAction(formData: FormData): Promise<{ url: str
 
   const publicUrl = data.publicUrl;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/upload/save-existing`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        file_url: publicUrl,
-        filename: file.name,
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`Failed to save resume record: ${err}`);
-  }
-
   return { url: publicUrl };
 }
